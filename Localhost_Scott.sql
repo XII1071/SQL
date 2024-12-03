@@ -1,0 +1,198 @@
+--형변한 함수 (자료형을 바꿔주는거)
+SELECT EMPNO, ENAME, EMPNO+'500'
+FROM EMP;
+WHERE ENAME= 'SCOTT'
+
+
+-- 오류! 올바른 형식이아닙니다.
+SELECT 'ABCD'+ EMPNO, EMPNO
+FROM EMP
+WHERE ENAME = 'SCOTT'
+
+--1. TO_CHAER (DATE자료형을 문자열 자료형으로 변환)
+SELECT TO_CHAR(SYSDATE,'YYYY/MM/DD HH24:MI:SS')AS 현재날짜시간
+FROM DUAL;
+--하나의 커리는 ;로 나눈다
+
+SELECT 	TO_CHAR(SYSDATE, 'YYYY-MM-DD') AS now,
+		TO_CHAR(SYSDATE, 'CC') AS CC, --세기
+		TO_CHAR(SYSDATE, 'YYYY') AS YYYY, --4자린년도
+		TO_CHAR(SYSDATE, 'YY') AS YY, --뒤 2자리년도
+		TO_CHAR(SYSDATE, 'MM') AS MM, -- 월
+		TO_CHAR(SYSDATE, 'MON') AS MON, -- 월의약자
+		TO_CHAR(SYSDATE, 'MONTH') AS MONTH, --월의 풀네임
+		TO_CHAR(SYSDATE, 'DD') AS DD,
+		TO_CHAR(SYSDATE, 'DDD') AS DDD,
+		TO_CHAR(SYSDATE, 'DY') AS DY,
+		TO_CHAR(SYSDATE, 'DAY') AS DAY,
+		TO_CHAR(SYSDATE, 'WW') AS WW,
+		TO_CHAR(SYSDATE, 'W') AS W
+FROM DUAL;
+
+SELECT 	TO_CHAR(SYSDATE, 'YYYY-MM-DD', 'NLS_DATE_LANGUAGE = ENGLISH') AS now,
+		TO_CHAR(SYSDATE, 'CC', 'NLS_DATE_LANGUAGE = ENGLISH') AS CC,
+		TO_CHAR(SYSDATE, 'YYYY', 'NLS_DATE_LANGUAGE = ENGLISH') AS YYYY,
+		TO_CHAR(SYSDATE, 'YY', 'NLS_DATE_LANGUAGE = ENGLISH') AS YY,
+		TO_CHAR(SYSDATE, 'MM', 'NLS_DATE_LANGUAGE = ENGLISH') AS MM,
+		TO_CHAR(SYSDATE, 'MON', 'NLS_DATE_LANGUAGE = ENGLISH') AS MON,
+		TO_CHAR(SYSDATE, 'MONTH', 'NLS_DATE_LANGUAGE = ENGLISH') AS MONTH,
+		TO_CHAR(SYSDATE, 'DD', 'NLS_DATE_LANGUAGE = ENGLISH') AS DD,
+		TO_CHAR(SYSDATE, 'DDD', 'NLS_DATE_LANGUAGE = ENGLISH') AS DDD,
+		TO_CHAR(SYSDATE, 'DY', 'NLS_DATE_LANGUAGE = ENGLISH') AS DY,
+		TO_CHAR(SYSDATE, 'DAY', 'NLS_DATE_LANGUAGE = ENGLISH') AS DAY,
+		TO_CHAR(SYSDATE, 'WW', 'NLS_DATE_LANGUAGE = ENGLISH') AS WW,
+		TO_CHAR(SYSDATE, 'W', 'NLS_DATE_LANGUAGE = ENGLISH') AS W
+FROM DUAL;
+
+
+--시간을 문자열로 변경
+-- HH24(24시간제) / HH12 , HH (12시간제)
+-- MI (분) / SS (초)
+-- AM, PM, A.M. , P.M. (오전/오후 표시)
+TO_CHAR(SYSDATE, 'HH24:MI:SS')AS HH24MISS,
+TO_CHAR(SYSDATE, 'HH12:MI:SS AM')AS HHMISS_AM,
+TO_CHAR(SYSDATE, 'HH:MI:SS P.M')AS HHMISS_PM
+FROM DUAL;
+
+-- 숫자를 문자열로
+SELECT SAL,
+    TO_CHAR(SAL, '$999,999')AS SAL_$, --9는 자리수를 안채워도 된다
+    TO_CHAR(SAL, 'L999,999')AS SAL_L, -- L = LOCALE (지역 단위화폐) 
+    TO_CHAR(SAL, '999,999.00')AS SAL_1, -- 0은 자리수를 채운다.
+    TO_CHAR(SAL, '000,999,999.00')AS SAL_2,
+    TO_CHAR(SAL, '000999999.99')AS SAL_3, -- 소수점은 9,0 뭐든지 자리수를 채운다
+    TO_CHAR(SAL, '999,999.00')AS SAL_4 -- , 는 그냥 자리수 표시
+FROM EMP;
+
+-- 2. TO_NUMBER (문자데이터를 숫자데이터로)
+--암시적 (묵시적) 형변환/ 자동으로 형변환을 해준다.
+SELECT 1300 - '1500', '1300' + 1500
+FROM DUAL;
+
+-- 에러! 연산에 올바른 형식이 아닙니다
+SELECT '1,300' - '1,500'
+FROM DUAL;
+
+-- 문자 > 숫자 형변환
+SELECT TO_NUMBER ('1,300.122', '999,999.999') - TO_NUMBER ('1,500.123', '999,999.999')
+FROM DUAL;
+
+-- 3. 문자열 > DATE 로 변환
+SELECT  TO_DATE('20241203', 'YYYY-MM-DD') AS TODATE1,
+        TO_DATE('2024-12-03', 'YYYY-MM-DD') AS TODATE2,
+        TO_DATE('2024/12/03', 'YYYY/MM/DD') AS TODATE3
+FROM DUAL;
+-- 쿼리문 조회는 보통 같은 자료형으로 해주는게 좋다
+
+SELECT * FROM EMP
+WHERE HIREDATE > TO_DATE ('1981-06-01', 'YYYY-MM-DD');
+
+-- YY와 RR의 차이점 (4자리일 땐 상관x / 두자리일 때만)
+SELECT  TO_DATE('49/12/10', 'YY/MM/DD') AS YY_YEAR_49,
+        TO_DATE('49/12/10', 'RR/MM/DD') AS RR_YEAR_49,
+        TO_DATE('50/12/10', 'YY/MM/DD') AS YY_YEAR_50,
+        TO_DATE('50/12/10', 'RR/MM/DD') AS RR_YEAR_50,
+        TO_DATE('51/12/10', 'YY/MM/DD') AS YY_YEAR_51,
+        TO_DATE('51/12/10', 'RR/MM/DD') AS RR_YEAR_51
+FROM DUAL;
+
+-- NULL 처리 함수 (NVL , NVL2)
+SELECT * FROM EMP
+-- NVL (DATA, DATA가 NULL이면?)
+SELECT EMPNO, ENAME, SAL, COMM, SAL+COMM,
+        NVL(COMM, 0), SAL+NVL(COMM, 0) --
+FROM EMP;
+
+-- NVL2 (DATA, NULL이 아니면? , NULL 이면?)
+SELECT EMPNO, ENAME, COMM, SAL,
+        NVL2(COMM, '0', 'X') AS 추가수당유무,
+        NVL2(COMM, SAL*12+COMM, SAL*12) AS 연봉
+FROM EMP;
+
+-- 상황에 따라 다른 데이터를 반환하는 함수
+-- DECODE (DATA ,)
+-- 1번 데이터, 1번데이터라면?,
+-- 2번 데이터, 2번데이터라면?,
+-- DEFAULT ) AS 별칭
+
+SELECT EMPNO, ENAME, JOB, SAL,
+        DECODE( JOB,
+        'MANAGER', SAL*1.1,
+        'SALESMAN', SAL*1.05,
+        'ANALYST', SAL,
+        SAL*1.03) AS UPSAL
+FROM EMP;
+ORDER BY JOB;
+-- CASE WHEN-THEN절
+-- CASE DATA (기준)
+--      WHEN 1번데이터 THEN 1번데이터라면?
+--      WHEN 2번데이터 THEN 2번데이터라면?
+--      ELSE 기본값 (1번,2번데이터라면?)
+SELECT EMPNO, ENAME, JOB, SAL,
+        CASE JOB
+            WHEN 'MANAGER'  THEN SAL*1.1
+            WHEN 'SALESMAN' THEN SAL*1.05
+            WHEN 'ANALYST'  THEN SAL
+            ELSE SAL*1.03
+        END AS UPSAL
+FROM EMP
+ORDER BY JOB;
+
+-- CASE-WHEN-THEN 절 기분 데이터 없이 사용!
+SELECT EMPNO, ENAME, COMM,
+        CASE
+            WHEN COMM IS NULL THEN '해당 사항 없음'
+            WHEN COMM = 0 THEN '수당 없음'
+            WHEN COMM > 0 THEN '수당 : ' || COMM
+            END AS COMM_TEXT
+FROM EMP;
+
+--6장 연습문제 1번
+    SELECT EMPNO, ENAME, RPAD(SUBSTR(EMPNO, 1, 2), 4, '*') AS MASKING_EMPNO,
+        RPAD(SUBSTR(ENAME, 1, 1), LENGTH(ENAME), '*') AS MASKING_ENAME
+    -- 1,2 사원번호 앞2자리 출력 앞두자리SUBSTR 뒷자리RPAD
+    FROM  EMP
+    WHERE LENGTH(ENAME) >= 5
+    AND   LENGTH(ENAME) < 7;
+
+-- 6장 연습문제 2번
+SELECT EMPNO, ENAME, SAL, TRUNC(SAL/21.5/8, 2) AS DAY_PAY,  
+        ROUND(SAL/21.5/8, 1) AS TIME_PAY
+FROM   EMP;
+
+--6장 연습문제 3번
+--3-1. EMP테이블에서 사원들은 입사일(HIREDATE)을 기준으로 3개월이 지난 후 첫 월요일에 정직원이 됩니다.
+--3-2. 사원들이 정직원이 되는 날짜(R_JOB)를 YYYY-MM-DD 형식으로 
+     --사원번호, 사원이름, 고용일, 정직원이되는날짜(R_JOB), 추가수당(COMM)으로 출력하시오.
+--3-3. 단, 추가 수당(COMM)이 없는 사원의 추가 수당은 N/A로 출력하세요.
+
+SELECT EMPNO, ENAME, HIREDATE, 
+        TO_CHAR(NEXT_DAY(ADD_MONTHS(HIREDATE, 3), '월요일'), 'YYYY-MM-DD')AS R_BOB,
+        NVL(TO_CHAR(COMM), 'N/A')AS COMM
+FROM EMP;
+
+--6장 4번문제
+--case 기준
+SELECT EMPNO,ENAME, MGR, 
+    CASE 
+        WHEN MGR IS NULL THEN '0000'
+        WHEN SUBSTR(MGR, 1, 2) = '75' THEN '5555'
+        WHEN SUBSTR(MGR, 1, 2) = '76' THEN '6666'
+        WHEN SUBSTR(MGR, 1, 2) = '77' THEN '7777'
+        WHEN SUBSTR(MGR, 1, 2) = '78' THEN '8888'
+        END AS CHG_MGR
+FROM EMP;
+
+SELECT EMPNO, ENAME, MGR,
+        DECODE(SUBSTR(MGR, 1, 2),
+        NULL, '0000',
+        '75', '5555',
+        '76', '6666',
+        '77', '7777',
+        '78', '8888',
+        MGR)
+FROM EMP;
+
+SELECT * FROM EMP
+WHERE EMPNO = 7876 
+   OR JOB = 'CLERK';
