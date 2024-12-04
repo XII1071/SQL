@@ -130,11 +130,19 @@ GROUP BY EMPTNO, JOB
 ORDER BY EMPTNO, JOB;
 
 -- HAVING 조건절 추가
+-- HAVING 절의 조건을 WHERE 절에 사용하면 에러난다다
 SELECT DEPTNO, JOB, AVG(SAL)
 FROM EMP
 GROUP BY DEPTNO, JOB
 HAVING AVG(SAL) >= 2000
 ORDER BY DEPTNO, JOB;
+
+-- QUERY 의 메커니즘
+-- 1. 먼저 출력을 한다 (SELECT FROM WHERE)
+-- 2. 그룹화를 진행한다. (GROUP BY)
+-- 3. 다중행 함수를 진행한다. (COUNT, MAX, MIN, AVG, SUM)
+-- 4. 그룹화 조건을 확인한다. (HAVING)
+-- 5. 나온값을 기준으로 정렬한다. (ORDER BY)
 
 SELECT DEPTNO, JOB, AVG(SAL)
 FROM EMP
@@ -142,6 +150,8 @@ WHERE SAL <= 3000
 GROUP BY DEPTNO, JOB
 HAVING AVG(SAL) >= 2000
 ORDER BY DEPTNO, JOB;
+
+
 
 
 
