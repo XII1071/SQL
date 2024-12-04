@@ -242,3 +242,95 @@ SELECT DEPTNO, ENAME, SAL
 FROM EMP
 ORDER BY DEPTNO, SAL;
 
+-- PIVOT / UNPIVOT
+-- 기전 테이블 행을 열로 변경/ 기존 테이블 열을 행으로 변경
+SELECT DEPTNO, JOB, MAX(SAL)
+FROM EMP
+GROUP BY DEPTNO, JOB
+ORDER BY DEPTNO, JOB;
+
+SELECT *
+FROM (SELECT DEPTNO, JOB, SAL FROM EMP)
+PIVOT (MAX(SAL) 
+        FOR DEPTNO IN (10,20,30)
+        )
+ORDER BY JOB;
+
+SELECT *
+FROM (SELECT DEPTNO, JOB, SAL FROM EMP)
+PIVOT (MAX(SAL) FOR JOB IN ('CLERK' AS CLERK,
+                              'SALESMAN' AS SALESMAN,
+                              'PRESIDENT' AS PRESIDENT,
+                              'MANAGER' AS MANAGER,
+                              'ANALYST' AS ANALYST
+                )
+        )
+ORDER BY DEPTNO;
+
+-- 위에 내용을 DECODE 방식
+SELECT DEPTNO,
+        MAX(DECODE(JOB, 'CLERK', SAL))AS CLERK,
+        MAX(DECODE(JOB, 'SALESMAN', SAL))AS SALESMAN,
+        MAX(DECODE(JOB, 'PRESIDENT', SAL))AS PRESIDENT,
+        MAX(DECODE(JOB, 'MANAGER', SAL))AS MANAGER,
+        MAX(DECODE(JOB, 'ANALYST', SAL))AS ANALYST
+FROM EMP
+GROUP BY DEPTNO
+ORDER BY DEPTNO;
+
+SELECT * 
+FROM (SELECT DEPTNO,
+        MAX(DECODE(JOB, 'CLERK', SAL))AS CLERK,
+        MAX(DECODE(JOB, 'SALESMAN', SAL))AS SALESMAN,
+        MAX(DECODE(JOB, 'PRESIDENT', SAL))AS PRESIDENT,
+        MAX(DECODE(JOB, 'MANAGER', SAL))AS MANAGER,
+        MAX(DECODE(JOB, 'ANALYST', SAL))AS ANALYST
+FROM EMP
+GROUP BY DEPTNO
+ORDER BY DEPTNO)
+UNPIVOT ( SAL
+        FOR JOB IN (CLERK, SALESMAN, PRESIDENT, MANAGER, ANALYST))
+ORDER BY DEPTNO, JOB;
+
+-- 7장 문제 
+-- 1. 각 부서별 급여 (SAL)의 평균, 최대, 최소 및 부서 인원을 출력하시오.
+SELECT DEPTNO, TRUNC(AVG(SAL)), MAX(SAL), MIN(SAL), COUNT(*)
+FROM EMP
+GROUP BY DEPTNO
+ORDER BY DEPTNO;
+
+-- 2. 각 직책의 사원수가 3명인 이상인 직책과 사원 수를 출력하시오.
+SELECT JOB, COUNT(*)
+FROM EMP
+GROUP BY JOB
+HAVING COUNT(*) >=3;
+-- 3. 사원들의 입사 연도를 기준으로 부서별로 몇 명이 입사했는지 출력하시오.
+-- HIRE_YEAR (입사연도), DEPTNO, CNT (명 수)
+SELECT 
+    TO_CHAR(HIREDATE, 'YYYY') AS HIRE_YEAR, -- HIRE_DATE에서 연도 추출
+    DEPTNO, 
+    COUNT(*) AS CNT -- 부서별 사원 수 계산
+FROM  EMP
+GROUP BY 
+    TO_CHAR(HIREDATE, 'YYYY'), DEPTNO
+ORDER BY HIRE_YEAR;
+
+-- 4. 추가 수당 (COMM)이 있는 사람과 없는 사람의 수를 출력하시오.
+-- 있는 사람은 'O' 없는 사람은 'X'로 하여 별치을 EXIST_COMM
+-- 사람 수 컬럼에 대한 별칭은 CNT
+
+SELECT 
+    NVL2(COMM, 'O', 'X') AS EXIST_COMM, -- COMM 값이 NULL이 아니면 'O', NULL이면 'X'
+    COUNT(*) AS CNT                     -- 각 그룹의 사람 수 계산
+FROM 
+    EMP
+GROUP BY 
+    NVL2(COMM, 'O', 'X')                -- COMM 값에 따라 그룹화
+ORDER BY 
+    EXIST_COMM;   
+-- NVL2(COMM, 'O', 'X'):
+--      COMM 값이 NULL이 아니면 'O'를 반환 (추가 수당 있음).
+--      COMM 값이 NULL이면 'X'를 반환 (추가 수당 없음).
+--      COUNT(*): 각 그룹에 해당하는 사람 수를 계산합니다.
+--      GROUP BY: NVL2(COMM, 'O', 'X') 결과를 기준으로 그룹화합니다.
+--      ORDER BY: 결과를 'O'와 'X' 순서대로 정렬합니다.
