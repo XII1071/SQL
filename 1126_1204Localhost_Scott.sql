@@ -1,0 +1,6 @@
+SELECT
+        DISTINCT JOB
+FROM
+        EMP
+
+SELECT * FROM
