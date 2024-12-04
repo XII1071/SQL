@@ -76,7 +76,51 @@ SELECT DEPTNO, JOB, AVG(SAL)
 FROM EMP
 GROUP BY DEPTNO, JOB;
 
--- 각 부서별 가장 오래된 입사일과 가장 빠른 입사일을 출력하세요.
+-- 각 부서별 가장 오래된 입사일과 가장 최근 입사일을 출력하세요.
+-- 답
+SELECT DEPTNO, MIN(HIREDATE), MAX(HIREDATE)
+FROM EMP
+GROUP BY DEPTNO
+ORDER BY DEPTNO;
+-- 검수
+SELECT DEPTNO, HIREDATE
+FROM EMP
+ORDER BY DEPTNO, HIREDATE;
+
+-- 직급별 사람의 수와 급여의 평균을 출력하세요.
+-- 답
+SELECT JOB, COUNT(JOB), AVG(SAL)
+FROM EMP
+GROUP BY JOB
+ORDER BY JOB;
+--검수
+SELECT JOB, SAL
+FROM EMP
+ORDER BY JOB, SAL;
+
+-- 사수의 직급번호(MGR)별 COUNT를 출력하세요. 
+-- 답
+SELECT NVL(TO_CHAR(MGR), '없음'), COUNT(*) -- 모든 ROW를 카운트
+FROM EMP
+GROUP BY MGR
+ORDER BY MGR;
+-- 검수
+SELECT NVL(TO_CHAR(MGR), '없음')
+FROM EMP
+ORDER BY MGR;
+
+-- 각 부서-직급별 사원 이름의 두번째 자리에 A 또는 L 이 들어가는 사원의 수를 출력하세요.
+-- 답
+SELECT DEPTNO, JOB, COUNT(ENAME)
+FROM EMP
+WHERE ENAME LIKE '_A%'
+OR ENAME LIKE '_L%'
+GROUP BY DEPTNO, JOB;
+-- 검수
+SELECT DEPTNO, JOB, ENAME
+FROM EMP
+WHERE ENAME LIKE '_A%'
+OR ENAME LIKE '_L%';
 
 
 
