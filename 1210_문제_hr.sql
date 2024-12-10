@@ -1,3 +1,9 @@
+-- 문제2) IT부서에서 근무하고 있는 사람들을 출력하라.
+
+
+
+
+
 -- 문제8) 각 직책 별(job_title)로 급여의 총합을 구하되 직책이
 --        Representative 인 사람은 제외하십시오.
 --        단, 급여 총합이 30000 초과인 직책만 나타내며,
@@ -38,16 +44,30 @@ SELECT
     L.CITY                                         AS 도시명,
     C.COUNTRY_NAME                                 AS 나라명
 FROM
-    EMPLOYEES  E,
+    EMPLOYEES   E,
     DEPARTMENTS D,
     LOCATIONS   L,
-    COUNTRIES  C
+    COUNTRIES   C
 WHERE
     E.DEPARTMENT_ID = D.DEPARTMENT_ID(+)
     AND D.LOCATION_ID = L.LOCATION_ID(+)
     AND L.COUNTRY_ID = C.COUNTRY_ID(+);
 
 SELECT
-    COUNT(*) 
+    COUNT(*)
 FROM
     EMPLOYEES;
+
+-- 문제 9 각 부서 이름 별로 2005년 이전에 입사한 직원들의 인원수를 조회하시오
+
+
+SELECT
+    D.DEPARTMENT_NAME    AS 부서명,
+    COUNT(E.EMPLOYEE_ID) AS 인원수
+FROM
+    EMPLOYEES   E,
+    DEPARTMENTS D
+WHERE
+    E.DEPARTMENT_ID = D.DEPARTMENT_ID
+    AND E.HIRE_DATE < to_date( '2005/01/01', 'yyyy/mm/dd')
+group by D.DEPARTMENT_NAME;
