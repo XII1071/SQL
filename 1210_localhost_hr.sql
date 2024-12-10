@@ -154,4 +154,127 @@ WHERE
     --    비등가 조인으로 엮음
 ORDER BY
     E.SAL;
-    
+
+-- 자체조인 : 같은 테이블을 조인한다.
+SELECT
+    *
+FROM
+    EMP;
+
+SELECT
+    E1.EMPNO,
+    E1.ENAME,
+    E1.MGR,
+    E2.EMPNO AS MGR_EMPNO,
+    E2.ENAME AS MGR_ENAME
+FROM
+    EMP E1,
+    EMP E2
+WHERE
+    E1.MGR = E2.EMPNO(+);
+
+ORDER BY E1.EMPNO;
+
+--등가 조인 조건
+
+
+-- 외부 조인 : NULL 이 있는 데이터도 출력함
+-- 왼쪽 외부 조인(LEFT OUTER JOIN) / 오른쪽 외부 조인(RIGHT OUTER JOIN)
+-- WHERE 절의 조건에 기준 열중 한 쪽에 (+)를 작성한다.
+SELECT
+    *
+FROM
+    EMP BY MGR;
+
+-- LEFT OUTER JOIN
+SELECT
+    E1.EMPNO,
+    E1.ENAME,
+    E1.MGR,
+    E2.EMPNO AS MGR_EMPNO,
+    E2.ENAME AS MGR_ENAME
+FROM
+    EMP E1,
+    EMP E2
+WHERE
+    E1.MGR = E2.EMPNO(+);
+
+ORDER BY E1.EMPNO;
+
+-- RIGHT OUTER JOIN
+SELECT
+    E1.EMPNO,
+    E1.ENAME,
+    E1.MGR,
+    E2.EMPNO AS MGR_EMPNO,
+    E2.ENAME AS MGR_ENAME
+FROM
+    EMP E1,
+    EMP E2
+WHERE
+    E1.MGR(+) = E2.EMPNO;
+
+ORDER BY E1.MGR;
+
+-- ORACLE 문법이 아닌 SQK-99 표준 문법
+-- TABLE(A) TABLE(B)  NATURAL JOIN : 등가조인
+-- 두테이블에 이름과 자료형이 같은 컬럼을 찾은 후 그 열을 기준으로 등가 조인함.
+-- 기준이 되는 COLUMN은 테이블을 지정하면 안된다
+SELECT
+    E.EMPNO,
+    E.ENAME,
+    DEPTNO,
+    D.DNAME,
+    D.LOC
+FROM
+    EMP  E
+    NATURAL JOIN DEPT D
+ORDER BY
+    DEPTNO,
+    E.EMPNO;
+
+-- JOIN - USING(COLUMN) : USING(COLUMN)에 지정한 COLUMN 으로 조인함
+-- 기준이 되는 COLUMN은 테이블을 지정하면 안된다
+SELECT
+    E.EMPNO,
+    E.ENAME,
+    DEPTNO,
+    D.DNAME,
+    D.LOC
+FROM
+    EMP  E
+    JOIN DEPT D
+    USING (DEPTNO)
+ORDER BY
+    DEPTNO,
+    E.EMPNO;
+
+-- TABLE(A) JOIN TABLE(B) ON (조건식) : 조인방법
+-- ON (조인조건식)의 조인조건식에 따라 조건을 하는 방법
+SELECT
+    E.EMPNO,
+    E.ENAME,
+    D.DEPTNO,
+    D.DNAME,
+    D.LOC
+FROM
+    EMP  E
+    JOIN DEPT D
+    ON (E.DEPTNO = D.DEPTNO)
+ORDER BY
+    E.DEPTNO;
+
+SELECT
+    E.DEPTNO,
+    E.ENAME,
+    E.SAL,
+    S.GRADE,
+    S.LOSAL,
+    S.HISAL
+FROM
+    EMP      E
+    JOIN SALGRADE S
+    ON (E.SAL BETWEEN S.LOSAL
+    AND S.HISAL)
+ORDER BY
+    E.SAL;
