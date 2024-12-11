@@ -1,0 +1,198 @@
+-- 문자 함수
+
+-- 1. UPPER( 대문자로 ) , LOWER ( 소문자로 ) , INITCAP ( 첫글자만 대문자로 )
+-- EMP 테이블에서 ENAME과 대문자ENAME, 소문자ENAME, 첫글자만 대문자인ENAME 을 출력
+SELECT ENAME , UPPER(ENAME), LOWER(ENAME), INITCAP(ENAME)
+FROM EMP;
+-- UPPER 테스트
+SELECT 'aaaaa', UPPER('aaaaa')
+FROM dual;
+-- LIKE 랑 함께 사용
+-- EMP테이블에서 대문자ENAME 중 대문자scott를 가진 데이터를 출력
+SELECT *
+FROM EMP
+--where lower(ename) like 'scott';
+--WHERE UPPER(ENAME) LIKE 'scott';
+WHERE UPPER(ENAME) LIKE UPPER('scott');
+-- 검색할 용도할 때
+-- EMP테이블에서 대문자ename 중 SCOTT를 포함하는 데이터를 출력
+SELECT *
+FROM EMP
+WHERE UPPER(ENAME) LIKE UPPER('%SCOTT%');
+
+-- 2. LENGTH(글자길이) , LENGTHB(글자 바이트 길이)
+SELECT ENAME, LENGTH(ENAME), LENGTHB(ENAME)
+FROM EMP
+WHERE ENAME LIKE('SCOTT');
+-- 한글 LENGTH, LENGTHB 확인해보기
+SELECT LENGTH('한글'), LENGTHB('한글')
+FROM DUAL;
+-- 글자 수로 사원 데이터 출력
+SELECT ENAME, LENGTH(ENAME)
+FROM EMP
+WHERE LENGTH(ENAME) >= 5;
+
+-- 3. SUBSTR(DATA, 시작위치, 몇개?) 단어 자르기
+SELECT JOB , SUBSTR(JOB, 1, 2), SUBSTR(JOB, 3, 2), SUBSTR(JOB, 5)
+FROM EMP;
+--SUBSTR 글자 기준을 뒤에서부터 사용하기
+SELECT JOB, SUBSTR(JOB, -LENGTH(JOB)), 
+       SUBSTR(JOB,-LENGTH(JOB), 3), SUBSTR(JOB, -2)
+FROM EMP;
+-- 수식을 넣어서 작성하기
+SELECT 'ABCDEFG', SUBSTR('ABCDEFG', LENGTH('ABCDEFG')-2, 3)
+FROM DUAL;
+
+-- 4. INSTR( DATA , 찾을단어 , 몇번째글자부터? , 몇번째단어? )
+-- 내가 찾는 단어가 어디에 있는지 알려주는 함수 ( 위치 번호 출력 )
+SELECT  INSTR('HELLO, ORACLE!', 'L') AS INSTR_1,
+        INSTR('HELLO, ORACLE!', 'L', 5) AS INSTR_2,
+        INSTR('HELLO, ORACLE!', 'L', 2, 2) AS INSTR_3
+FROM DUAL;
+--EMP 테이블에 적용시켜보기
+SELECT *
+FROM EMP
+WHERE INSTR(ENAME, 'S')>0;
+--WHERE ENAME LIKE '%S%'; ( 위의 INSTR 절과 같은 뜻 )
+-- 두 개의 단어를 찾을 때는 ?
+SELECT ENAME, INSTR(ENAME, 'MI')
+FROM EMP;
+
+-- 5. REPLACE( DATA, 찾는 문자 , 대체할 문자 )
+-- DATA에서 지정한 문자를 찾아서 대체하는 함수
+SELECT  '010-1234-5678' AS REPLACE_BEFORE,
+        REPLACE('010-1234-5678', '-' , ' ') AS REPLACE_1,
+        REPLACE('010-1234-5678', '-') AS REPLACE_2
+FROM DUAL;
+--EMP 테이블에 적용
+-- 직책에 MAN 이 들어가면 MANgood 으로 바꾼다.
+SELECT JOB, REPLACE(JOB, 'MAN', 'MANgood')
+FROM EMP;
+
+-- 6. LPAD / RPAD ( DATA , 자리수 , 채울 문자 )
+-- 자리 수 맞춰주기 또는 특정 문자로 빈 공간 채워주기
+SELECT  'ORACLE',
+        LPAD('ORACLE', 10, '#') AS LPAD_1,
+        RPAD('ORACLE', 10, '*') AS RPAD_1,
+        LPAD('ORACLE', 10) AS LPAD_2,
+        RPAD('ORACLE', 10) AS RPAD_2
+FROM DUAL;
+-- 실생활 적용 예제
+SELECT RPAD('010-1234-', 13,'*') AS RPAD_JMNO
+FROM DUAL;
+-- 전체 데이터를 잘라서 숨기는 방법.
+SELECT  RPAD(SUBSTR('971225-1234567', 1, 7), 14, '*') AS RPAD_JMNO,
+        RPAD(SUBSTR('010-1234-1234', 1, 9), 13, '*') AS RPAD_PHONE
+FROM DUAL;
+
+-- 7. CONCAT ( DATA 1, DATA 2 )
+-- 1번과 2번의 데이터를 합쳐서 출력
+SELECT  CONCAT(EMPNO, ENAME),
+        CONCAT(EMPNO, CONCAT(' : ', ENAME))
+FROM EMP
+WHERE ENAME = 'SCOTT';
+
+-- 8. TRIM ([삭제옵션{선택}] [삭제할문자{선택}] FROM [ DATA ] )
+-- 양 옆의 특정 단어(공백)를 삭제 
+SELECT  '[' || ' _ _ORACLE_ _ ' || ']' AS NOTTRIM,
+        '[' || TRIM(' _ _ORACLE_ _ ')|| ']' AS TRIM,
+        '[' || TRIM(LEADING FROM ' _ _ORACLE_ _ ') || ']' AS TRIM_LEADING,
+        '[' || TRIM(TRAILING FROM ' _ _ORACLE_ _ ') || ']' AS TRIM_TRAILING,
+        '[' || TRIM(BOTH FROM ' _ _ORACLE_ _ ') || ']' AS TRIM_BOTH
+FROM DUAL;
+-- 특정 문자를 삭제
+SELECT  '[' || '_ _ORACLE_ _' || ']' AS NOTTRIM,
+        '[' || TRIM('_' FROM '_ _ORACLE_ _') || ']' AS TRIM,
+        '[' || TRIM(LEADING '_' FROM '_ _ORACLE_ _') || ']' AS TRIM_L,
+        '[' || TRIM(TRAILING '_' FROM '_ _ORACLE_ _') || ']' AS TRIM_T,
+        '[' || TRIM(BOTH '_' FROM '_ _ORACLE_ _') || ']' AS TRIM_B
+FROM DUAL;
+-- LTRIM / RTRIM ( DATA , [삭제할문자{선택}] )
+-- 왼쪽 TRIM / 오른쪽 TRIM
+SELECT  '[' || TRIM(' _ORACLE_ ') || ']' AS TRIM,
+        '[' || LTRIM(' _ORACLE_ ') || ']' AS LTRIM,
+        '[' || RTRIM(' _ORACLE_ ') || ']' AS RTRIM,
+        '[' || LTRIM('<_ORACLE_>', '_<') || ']' AS LTRIM_2,
+        '[' || RTRIM('<_ORACLE_>', '>_') || ']' AS RTRIM_2
+FROM DUAL;
+
+-- 숫자함수
+
+-- 1. ROUND( DATA , 올릴 자리수{선택} )
+-- 숫자를 반올림 한다.
+SELECT  ROUND(1234.5678) AS ROUND,
+        ROUND(1234.5678, 0) AS ROUND_0,
+        ROUND(1234.5678, 1) AS ROUND_1,
+        ROUND(1234.5678, 2) AS ROUND_2,
+        ROUND(1234.5678, -1) AS ROUND_MINUS1,
+        ROUND(1234.5678, -2) AS ROUND_MINUS2
+FROM DUAL;
+
+-- 2. TRUNC ( DATA , 자리 수{선택} )
+-- 자리 수 이하를 절삭(버림)
+SELECT  TRUNC(1234.5678) AS TRUNC,
+        TRUNC(1234.5678, 0) AS TRUNC_0,
+        TRUNC(1234.5678, 1) AS TRUNC_1,
+        TRUNC(1234.5678, -2) AS TRUNC_MINUS2
+FROM DUAL;
+
+-- 3. CEIL / FLOOR ( DATA )
+-- 지정한 DATA 와 가장 가까운(큰/작은) 정수를 찾는 함수
+SELECT  CEIL(3.14), FLOOR(3.14),
+        CEIL(-3.14), FLOOR(-3.14)
+FROM DUAL;
+
+-- 4. MOD( DATA_1 , DATA_2 )
+-- DATA_1을 DATA_2로 나눈 나머지 값
+SELECT MOD(15 , 6), MOD(10 , 2), MOD(11 , 2)
+FROM DUAL;
+
+-- 날짜 함수
+
+-- SYSDATE 란? 현재 날짜/시간을 알려주는 DUAL 테이블의 속성
+SELECT SYSDATE
+FROM DUAL;
+
+-- 1. ADD_MONTHS( DATA , 숫자 )
+-- DATA 에 숫자 달을 더한다.
+SELECT SYSDATE , ADD_MONTHS(SYSDATE, 3)
+FROM DUAL;
+-- EMP 테이블와 함께 사용하기
+SELECT  EMPNO, ENAME, HIREDATE, 
+        ADD_MONTHS(HIREDATE, 120) AS WORK10YEAR
+FROM EMP;
+-- EMP 테이블 함께 사용 2
+-- 사원들의 50주년이 지나지 않은 사람 ( 384 = 32주년 )
+SELECT EMPNO, ENAME, HIREDATE, ADD_MONTHS(HIREDATE, 384), SYSDATE
+FROM EMP
+WHERE ADD_MONTHS(HIREDATE, 600) > SYSDATE;
+
+-- 2. MONTHS_BETWEEN( DATA_1 , DATA_2 )
+-- 두 개의 날짜 사이의 개월 수를 출력
+SELECT  EMPNO, ENAME, HIREDATE, SYSDATE,
+        MONTHS_BETWEEN(HIREDATE, SYSDATE) AS MONTHS1,
+        MONTHS_BETWEEN(SYSDATE, HIREDATE) AS MONTHS2,
+        TRUNC(MONTHS_BETWEEN(SYSDATE, HIREDATE))AS MONTHS3
+FROM EMP;
+
+-- 3. NEXT_DAY ( DATA , 요일 ) / LAST_DAY ( DATA )
+-- 돌아오는 요일 / 달의 마지막 날짜 구하기
+SELECT  SYSDATE, 
+        NEXT_DAY(SYSDATE, 1), 
+        LAST_DAY(SYSDATE)
+FROM DUAL;
+
+-- 4. ROUND / TRUNC ( 단위(FORMAT) : 책 P155 참고 )
+SELECT  SYSDATE,
+        ROUND(SYSDATE, 'CC') AS FORMAT_CC,
+        ROUND(SYSDATE, 'YYYY') AS FORMAT_YYYY,
+        ROUND(SYSDATE, 'Q') AS FORMAT_Q,
+        ROUND(SYSDATE, 'DDD') AS FORMAT_DDD,
+        ROUND(SYSDATE, 'HH') AS FORMAT_HH FROM DUAL;
+SELECT SYSDATE,
+       TRUNC(SYSDATE, 'CC') AS FORMAT_CC,
+       TRUNC(SYSDATE, 'YYYY') AS FORMAT_YYYY,
+       TRUNC(SYSDATE, 'Q') AS FORMAT_Q,
+       TRUNC(SYSDATE, 'DDD') AS FORMAT_DDD,
+       TRUNC(SYSDATE, 'HH') AS FORMAT_HH
+  FROM DUAL;

@@ -1,0 +1,50 @@
+다중행 함수
+
+ - SUM ( [DISTINCT, ALL] DATA ) : 합계
+ - COUNT ( DISTINCT, ALL] DATA ) : 집계 
+ - MIN/MAX ( DATA ) : 최소 / 최대 값
+ - AVG ( DISTINCT, ALL] DATA ) : 평균 값
+
+그룹화 GROUP BY 절
+
+ - GROUP BY COLUMN1, COLUMN2, ... , COLUMNn
+
+그룹화하여 출력한 결과물에서 조건을 추가하여 출력
+
+ - HAVING 그룹화 기준 데이터의 연산식
+
+그룹화와 관련된 함수
+-- 1. ROLLUP( A_DATA, B_DATA )
+      = A,B 데이터 그룹화한 것을 보여준다.
+      = A 데이터 그룹화한 것을 보여준다.
+      = 전체를 그룹화한 것을 보여준다.
+      = 오른쪽에서부터 그룹화를 하나씩 뺀다.
+-- 2. CUBE( A_DATA, B_DATA )
+      = A,B 데이터 그룹화한 것을 보여준다.
+      = A 데이터 그룹화한 것을 보여준다.
+      = B 데이터 그룹화한 것을 보여준다.
+      = 전체를 그룹화한 것을 보여준다.
+      = 모든 그룹에 대해서 보여준다.
+-- 3. GROUPING SETS( 기준데이터1, 기준데이터2, ... )
+      = 각 그룹화하는 기준컬럼을 각 컬럼별 그룹화로 보여준다.
+-- 4. GROUPING 함수
+      = ROLLUP, CUBE 소계가 되었는지 안되었는지 확인할 때 사용
+-- 5. GROUPING_ID 함수
+      = ROLLUP, CUBE 에서 소계가 잘 되었는지 나타내는 함수
+      = 2진수 벡터 값으로 나타낸다.
+-- 6. LISTAGG(기준열, [구분자]) WITHIN GROUP( ORDER BY 기준열 )
+      = 데이터를 정렬 기준에 맞춰 일렬로 (구분자를 넣어서) 나열해준다.
+-- 7. PIVOT / UNPIVOT
+      = 기존 테이블 행을 열로 변경 / 기존 테이블 열을 행으로 변경
+
+
+
+
+
+
+
+
+
+
+
+

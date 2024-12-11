@@ -1,0 +1,93 @@
+--문자 함수
+
+1. UPPER / LOWER / INITCAP ( DATA )
+    - 대문자로 / 소문자로 / 첫글자만 대문자
+2. LENGTH / LENGTHB ( DATA )
+    - 글자 수 / 글자당 바이트 수
+3. SUBSTR ( DATA , 시작위치 , 몇개?[선택] )
+    - 원하는 단어를 뽑아 출력
+4. INSTR ( DATA , 찾을 단어 , 몇 번째 글자부터?[선택] , 몇 번째 단어?[선택] )
+    - 원하는 단어가 몇 번째에 있는지 출력
+5. REPLACE ( DATA , 찾는 단어 , 대체할 단어[선택] )
+    - 단어를 찾고 대체(삭제)하여 출력
+6. LPAD / RPAD ( DATA , 자리수 , 빈칸에 대체할 단어[선택] )
+    - 왼쪽/오른쪽 자리수에 맞춰 단어(공백) 넣기
+7. CONCAT ( DATA_1 , DATA_2 )
+    - DATA_1 과 DATA_2 를 합쳐서 출력
+8. TRIM ([삭제옵션{선택}] [삭제할문자{선택}] FROM [ DATA ] )
+    - 양 옆의 공백 또는 지정한 문자를 삭제
+9. LTRIM / RTRIM ( DATA , [삭제할문자{선택}] )
+    - 왼쪽 TRIM / 오른쪽 TRIM
+
+--숫자 함수
+
+1. ROUND ( DATA , 올릴 자리 수{선택} ) 0을 기준으로 1로가면 소수점 -1로 가면 정수
+    - 지정한 위치의 자리 수에서 반올림을 한다.
+2. TRUNC ( DATA , 절삭할 자리 수{선택} )  0을 기준으로 1로가면 소수점 -1로 가면 정수
+    - 지정한 위치의 자리 수에서 절삭을 한다.
+3. CEIL / FLOOR ( DATA )
+    - DATA와 가장 가까운 큰 정수 ( CEIL )
+    - DATA와 가장 가까운 작은 정수 ( FLOOR )
+4. MOD ( DATA_1 , DATA_2 )
+    - DATA_1 을 DATA_2 로 나눈 나머지 값 출력
+
+-- 날짜 함수
+
+1. ADD_MONTHS ( DATA , 숫자 )
+    - DATA 에 숫자 달(월)을 더한다
+2. MONTHS_BETWEEN ( DATA_1 , DATA_2 )
+    - DATA_1 과 DATA_2 사이의 개월수를 구한다.
+    - 여기서, 구할 때는 DATA_1 에서 DATA_2 를 빼기 때문에 음수가 발생할 수 있다.
+3. NEXT_DAY ( DATA , 요일 ) / LAST_DAY ( DATA )
+    - 돌아오는 요일을 구하기 / 달의 마지막 날짜 구하기
+4. ROUND / TRUNC ( 날짜 단위(FORMAT) : 책 P 155 또는 공유폴더의 날짜 포맷 사이트 )
+    - 반올림 / 절삭
+
+-- 형변환 함수
+
+1. TO_CHAR ( DATA , DATA_FORMAT )
+    - 날짜 / 시간 > 문자열 ( 자세한 FORMAT 은 SQL 코드 참고 )
+    - 날짜 / 시간 > 문자열 ( 사용하는 언어도 변경할 수 있다. SQL 코드 참고 )
+    - 숫자 > 문자열 ( 자세한 FORMAT 은 SQL 코드 참고 )
+
+2. TO_NUMBER ( DATA, DATA_FORMAT )
+    - 문자열 > 숫자 ( 999,999 ) 작성된 문자열 포맷에 맞춰 작성
+
+3. TO_DATE ( DATA, DATA_FORMAT )
+    - 문자열 > 날짜 - FORMAT 에 맞춰서 변경하면 된다.
+    - YY 와 RR 의 차이점 ( 아래의 블로그 참고 )
+        = https://tlo-developer.tistory.com/72
+
+-- NULL 처리 함수 ( NVL , NVL2 )
+
+1. NVL ( DATA , DATA가 널이면? )
+
+2. NVL2 ( DATA , DATA가 NULL이 아니면? , DATA가 NULL이면? )
+
+-- 상황에 따라 다른 데이터를 반환하는 함수
+
+1. DECODE 함수
+   - DECODE( DATA ,
+        1번데이터 , 1번데이터라면 ?,
+	2번데이터 , 2번데이터라면 ?,
+	  ...      ...     ,
+	N번데이터 , N번데이터라면 ?,
+	DEFAULT 출력 )
+   - DECODE(DATA, 1번데이터 , 1번데이터라면?, 2번데이터, 2번데이터라면?, ....)
+
+   - 함수 ? 어떤 것을 넣어서 가공시켜 결과물을 내보내는 것
+
+2. CASE-WHEN-THEN 절
+   - CASE 기준이되는데이터(선택)
+        WHEN 1번데이터 THEN 1번데이터라면?
+        WHEN 2번데이터 THEN 2번데이터라면?
+	WHEN   ...  THEN  ...
+	WHEN N번데이터 THEN	 N번데이터라면?
+	ELSE 기본값
+     END
+
+
+
+
+
+

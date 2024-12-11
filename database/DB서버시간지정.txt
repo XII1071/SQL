@@ -1,0 +1,10 @@
+select dbtimezone, sessiontimezone from dual;
+select current_date, current_timestamp, localtimestamp from dual;
+
+alter session set time_zone = 'asia/seoul';
+
+alter database set time_zone = '+09:00';
+
+commit;
+
+이후에 데이터베이스 서버 종료 후 재실행

@@ -1,0 +1,37 @@
+실습 문제 전 실습용 테이블 만들기
+CREATE TABLE TEST_EMP AS SELECT * FROM EMP;
+CREATE TABLE TEST_DEPT AS SELECT * FROM DEPT;
+CREATE TABLE TEST_SALGRADE AS SELECT  *FROM SALGRADE;
+
+1. TEST_DEPT 테이블에 아래의 데이터를 넣으세요.
+
+DEPTNO	DNAME	LOC
+--------------------------
+50	ORACLE	BUSAN
+60	SQL	ILSAN
+70	SELECT	SEOUL
+80	DML	DAEGU
+
+2. TEST_EMP 테이블에 아래의 데이터를 넣으세요.
+
+EMPNO	ENAME		JOB		MGR	HIREDATE	SAL	COMM	DEPTNO
+-----------------------------------------------------------------------------------------
+7201	TEST_USER1	MANAGER		7788	2016-01-02	4500		50
+7202	TEST_USER2	CLERK		7201	2016-02-21	1800		50
+7203	TEST_USER3	ANALYST		7201	2016-04-11	3400		60
+7204	TEST_USER4	SALESMAN	7201	2016-05-31	2700	300	60
+7205	TEST_USER5	CLERK		7201	2016-07-20	2600		70
+7206	TEST_USER6	CLERK		7201	2016-09-08	2600		70
+7207	TEST_USER7	LECTURER	7201	2016-10-28	2300		80
+7208	TEST_USER8	STUDENT		7201	2018-03-09	1200		80
+
+3. TEST_EMP에 속한 사원 중 50번부서(DEPTNO)에서 근무하는 사원들의 
+   평균 급여(SAL)보다 많은 급여(SAL)를 받고 있는 사원들을 
+   70번부서(DEPTNO)로 옮기는 SQL문을 작성하세요.
+
+4. TEST_EMP에 속한 사원 중 60번부서(DEPTNO)의 사원 중에 
+   입사일(HIREDATE)이 가장 빠른 사원보다 늦게 입사한 사원의 급여(SAL)를 
+   10% 인상하고 80번부서(DEPTNO)로 옮기는 SQL문을 작성하세요.
+
+5. TEST_EMP에 속한 사원 중 
+   급여등급(SALGRADE)이 5인 사원을 삭제하는 SQL문을 작성하세요.

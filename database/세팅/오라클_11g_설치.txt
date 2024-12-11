@@ -1,0 +1,40 @@
+0. 설치 관련 티스토리 블로그
+  - https://master-shin.tistory.com/8
+
+1. 링크
+https://www.oracle.com/database/technologies/xe-prior-release-downloads.html
+
+2. x64 버전 다운로드 클릭 후 로그인하면 바로 다운로드 됨
+
+3. 다운로드 받은 zip 파일 압축풀기
+  - OracleXE112_Win64 > DISK1 > setup.exe 실행
+
+4. Next 하다 보면 비밀번호 입력창 "0000" 입력 후 진행
+
+5. cmd창 켜서 sqlplus 입력 후
+  - username : system
+  - password : 0000 ( cmd창에서는 password를 작성해도 안보임 )
+  - 오라클 버전과 함께 아래작성란이 sql> 로 변경된다.
+
+6. C드라이브 > oraclexe > app > oracle > product > 11.2.0
+   > server > rdbms > admin 폴더까지 접근
+   - C:\oraclexe\app\oracle\product\11.2.0\server\rdbms\admin 경로 복사
+
+7. 다시 cmd 창에 가서 sql> 작성란에 앞에 @ 작성 후 복사한 경로 붙여넣고 이어서 \scott.sql 작성하여 엔터
+   - show user 입력하면 User is SCOTT 라고 보여준다.
+
+8. alter user scott identified by tiger; 작성 후 엔터
+   - user altered. 라고 보여준다.
+
+9. sql developer 접속 만들기
+   - 맨위에 Name : localhost_scott
+   - 사용자이름 : scott
+   - 비밀번호 : tiger
+   - 아래의 테스트 버튼을 누르면 왼쪽 하단에 상태:성공 이라고 보여준다.
+
+10. 기본 데이터에 commit 아래 4줄 ( 2쿼리 ) 를 복사해서 입력한다.
+   - EMP 테이블에 데이터를 보면 14개의 row가 있으면 세팅 완료.
+
+
+
+

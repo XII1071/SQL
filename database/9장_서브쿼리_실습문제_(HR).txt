@@ -1,0 +1,23 @@
+1. Julia Nayer 라는 직원보다 더 낮은 월급을 받는 직원들의 
+   직원번호(EMPLOYEE_ID), 이름(FIRST_NAME , LAST_NAME), 월급(SALARY) 출력하기
+1-1. Julia 는 first_name
+1-2. Nayer 는 last_name
+
+2. Alexander Hunold와 직책ID(JOB_ID)가 같은 직원들의 
+   직원번호(EMPLOYEE_ID), 풀네임(FIRST_NAME || ' ' || LAST_NAME), 직책ID(JOB_ID) 출력
+2-1. Alexander Hunold 는 JOB_ID 
+
+3. job_id가 IT_PROG인 직원들 중 가장 적은 급여를 받는 직원보다, 
+   더 적은 급여를 받는 직원들의 직원번호(EMPLOYEE_ID), 직책코드(JOB_ID), 급여(SALARY)를 출력하기
+
+4. employees 테이블에서 각 직책별 최고 급여를 받는 직원들에 대하여
+- 해당 직원들의 사번(employee_id), 이름(first_name), 직책(job_id), 급여(salary) 출력하고, 결과는 직책 오름차순으로 정렬하기
+
+5. employees 테이블, departments 테이블을 바탕으로
+- location_id=1700인 모든 부서에 속한 사원들의
+- 직원번호(employee_id), 풀네임(FIRST_NAME || ' ' || LAST_NAME), 부서번호(department_id)를 출력하기
+
+6.employees 테이블에서
+- 직책ID(job_id)가 'IT_PROG'인 사람이 받는 최저 월급보다 더 많은 월급을 받는 직원들의
+- 직원번호, 성명(풀네임), 직책ID, 월급을 출력하기
+- any 를 사용해서 작성

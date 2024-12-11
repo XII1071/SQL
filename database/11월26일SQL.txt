@@ -1,0 +1,296 @@
+-- 모든 열과 행 출력하기
+SELECT *
+FROM EMP;
+
+-- 원하는 열을 뽑아서 출력하기
+SELECT EMPNO, ENAME, DEPTNO
+FROM EMP;
+
+-- DISTINCT( 중복제거 )
+-- 1. 전체 deptno 출력
+SELECT deptno
+from emp;
+
+-- 2. 중복제거한 deptno 출력
+SELECT DISTINCT deptno
+FROM emp;
+
+-- 3. 열이 여러 개인 경우
+SELECT DISTINCT job, deptno
+FROM emp;
+
+-- 4. 중복 제거 없이 그대로 출력하기
+SELECT ALL job, deptno
+FROM EMP;
+
+-- 별칭(별명) 설정하기
+-- 1. 별칭(별명) 없이 조회
+SELECT ename , sal , sal*12+comm , comm
+FROM EMP;
+
+-- 2. 별칭(별명) 사용해서 조회
+SELECT ename , sal , sal*12+comm AS 연봉, comm
+FROM EMP;
+
+-- ORDER BY ( 정렬 )
+-- 1. 오름차순 정렬
+SELECT *
+FROM EMP
+ORDER BY sal asc;
+
+-- 2. 내림차순 정렬
+SELECT *
+FROM EMP
+ORDER BY sal desc;
+
+-- 3. 여러 컬럼 지정하기
+SELECT *
+FROM EMP
+ORDER BY deptno, sal;
+
+-- 4. 여러 컬럼 / 다른 정렬 방식
+SELECT *
+FROM EMP
+ORDER BY deptno ASC , sal DESC;
+
+-- WHERE 절
+-- 1. EMP 테이블에서 부서번호가 30 인 데이터 출력
+SELECT *
+FROM EMP
+WHERE DEPTNO = 30;
+
+-- 2. AND 연산자 사용
+-- EMP 테이블에서 부서번호가 30 이고, 직업이 SALESMAN 인 데이터 출력
+SELECT *
+FROM EMP
+WHERE deptno = 30
+AND job = 'SALESMAN';
+
+-- OR 연산자
+-- EMP 테이블에서 부서번호가 30 이거나, 직업이 SALESMAN 인 데이터 출력
+SELECT *
+FROM EMP
+WHERE deptno = 30 OR job = 'SALESMAN';
+
+-- 산술연산자( + - * / )
+-- EMP테이블에서 SAL * 12 = 36000 이 되는 SAL 을 가진 데이터 출력
+SELECT *
+FROM EMP
+WHERE SAL * 12 = 36000;
+
+-- 비교 연산자 ( > , >= , < , <= )
+-- EMP 테이블에서 SAL 이 3000 이상인 데이터를 출력하라.
+SELECT *
+FROM EMP
+WHERE SAL >= 3000;
+
+-- EMP 테이블에서 직원이름이 F 보다 높거나 같은 이름을 가진 데이터 출력
+SELECT * 
+FROM EMP
+WHERE ENAME >= 'F';
+
+-- EMP 테이블에서 직원이름이 FORZ 보다 높거나 같은 이름을 가진 데이터 출력
+SELECT *
+FROM EMP
+WHERE ENAME < 'FORZ';
+
+-- 비교 연산자 ( = , != , <> , ^= )
+-- EMP 테이블에서 SAL 이 3000 인 데이터 출력
+SELECT * FROM EMP
+WHERE SAL = 3000;
+
+-- EMP 테이블에서 SAL 이 3000 이 아닌 데이터 출력
+SELECT * FROM EMP
+WHERE SAL != 3000;
+SELECT * FROM EMP
+WHERE SAL <> 3000;
+SELECT * FROM EMP
+WHERE SAL ^= 3000;
+
+
+-- 논리 부정 연산자 ( NOT )
+-- EMP 테이블에서 SAL 이 3000 이 아닌 데이터를 출력
+SELECT * FROM EMP
+WHERE NOT SAL = 3000;
+
+-- IN 연산자 ( 여러가지 데이터를 조회할 경우 사용 )
+-- EMP 테이블에 직업이 MANAGER, SALESMAN, CLERK 인 데이터를 출력
+-- IN 연산자를 사용하지 않을 경우(OR 연산)
+SELECT * FROM EMP
+WHERE JOB = 'MANAGER' OR JOB = 'SALESMAN' OR JOB = 'CLERK';
+
+-- IN 연산자를 사용할 경우
+SELECT * FROM EMP
+WHERE JOB IN('MANAGER', 'SALESMAN', 'CLERK');
+
+-- IN 연산자의 부정문에서 IN 을 사용하지 않을 경우(AND 연산)
+SELECT * FROM EMP
+WHERE JOB != 'MANAGER' AND JOB <> 'SALESMAN' AND JOB ^= 'CLERK';
+
+-- IN 연산자의 부정
+SELECT * FROM EMP
+WHERE JOB NOT IN('MANAGER', 'SALESMAN', 'CLERK');
+
+--BETWEEN a AND b 연산자 ( a 와 b 사이 데이터를 조회 )
+--EMP 테이블에서 급여가 2000 이상 3000 미만인 데이터를 출력
+--BETWEEN 을 사용하지 않을 때
+SELECT * FROM EMP
+WHERE SAL >= 2000 AND SAL <= 3000;
+
+--BETWEEN 을 사용할 때
+SELECT * FROM EMP
+WHERE SAL BETWEEN 2000 AND 3000;
+
+-- LIKE 연산자 ( 포함된 문자를 조회 )
+-- 와일드 카드 ( _ : 1글자 / % : 글자 개 수 상관없이 )
+-- EMP테이블에서 S로 시작하는 직원 이름을 출력
+SELECT ENAME
+FROM EMP
+WHERE ENAME LIKE 'S%';
+
+-- EMP 테이블에서 두번째 문자로 L을 가지는 직원이름을 출력하여라.
+SELECT ENAME
+FROM EMP
+WHERE ENAME LIKE '_L%';
+
+-- EMP 테이블에서 AM 을 포함하는 직원 이름을 출력하여라.
+SELECT ENAME
+FROM EMP
+WHERE ENAME LIKE '%AM%';
+
+-- LIKE 부정
+-- EMP 테이블에서 AM 을 포함하지 않는 직원 이름을 출력하여라
+SELECT ENAME
+FROM EMP
+WHERE ENAME NOT LIKE '%AM%';
+
+--ISNULL 연산자
+-- EMP 테이블에서 COMM 이 NULL 인 데이터를 출력하여라.
+SELECT *
+FROM EMP
+WHERE COMM IS NULL;
+
+-- EMP 테이블에서 COMM 이 NULL이 아닌 데이터를 출력하여라
+SELECT * FROM EMP
+WHERE COMM IS NOT NULL;
+
+-- NULL 과 AND 연산
+-- SAL > NULL 의 모든 결과값 = NULL
+-- COMM IS NULL 의 결과값 = 10개의 ROW
+-- 두 가지의 조건을 동시에 만족하는 결과값이 없어서 출력 데이터도 없음
+SELECT * FROM EMP
+WHERE SAL > NULL AND COMM IS NULL;
+
+-- NULL과 OR 연산
+-- SAL > NULL 의 모든 결과값 = NULL
+-- COMM IS NULL 의 결과값 = 10 ROW
+-- 두 가지 중 하나의 조건만 맞으면 출력
+SELECT * FROM EMP
+WHERE SAL > NULL OR COMM IS NULL;
+
+
+-- 집합연산자 ( UNION - 중복 제거 )
+SELECT EMPNO, ENAME, SAL, DEPTNO
+FROM EMP
+WHERE DEPTNO = 10
+UNION
+SELECT EMPNO, ENAME, SAL, DEPTNO
+FROM EMP
+WHERE DEPTNO = 10;
+
+-- 집합연산자 ( UNION ALL - 중복 허용 )
+SELECT EMPNO, ENAME, SAL, DEPTNO
+FROM EMP
+WHERE DEPTNO = 10
+UNION ALL
+SELECT EMPNO, ENAME, SAL, DEPTNO
+FROM EMP
+WHERE DEPTNO = 10;
+
+--집합 연산자 ( INTERSECT 교집합 )
+SELECT EMPNO , ENAME, SAL, DEPTNO
+FROM EMP
+INTERSECT
+SELECT EMPNO, ENAME, SAL, DEPTNO
+FROM EMP
+WHERE DEPTNO = 10;
+
+-- 집합 연산자 ( 차집합 MINUS )
+SELECT EMPNO, ENAME, SAL, DEPTNO
+FROM EMP
+MINUS
+SELECT EMPNO, ENAME, SAL, DEPTNO
+FROM EMP
+WHERE DEPTNO = 10;
+
+-- 실습 문제 풀어보기 
+
+-- 1. EMP 테이블에서 직업을 중복 없이 출력하라
+SELECT DISTINCT JOB
+FROM EMP;
+
+-- 2-1. EMP 테이블 모두 출력하기
+-- 2-2. 별칭 설정하기
+-- 2-3. 부서 번호를 기준으로 내림차순 정렬 하되, 부서 번호가 같으면 사원 이름 기준으로 오름차순 하라
+SELECT  EMPNO AS EMPLOYEE_NO, 
+        ENAME AS EMPLOYEE_NAME, 
+        JOB, 
+        MGR AS MANAGER, 
+        HIREDATE, 
+        SAL AS SALARY, 
+        COMM AS COMMISION, 
+        DEPTNO AS DEPARTMENT_NO
+FROM EMP
+ORDER BY DEPTNO DESC, ENAME ASC;
+
+-- 1. EMP 테이블에서 사원이름이 S 로 끝나는 사원 데이터를 모두 출력
+SELECT *
+FROM EMP
+WHERE ENAME LIKE '%S';
+
+-- 2. EMP 테이블에서 30번 부서에서 근무하는 사원 중에
+--    직책이 SALESMAN인 사원의 사원번호, 이름, 직책, 급여, 부서번호를 출력
+SELECT EMPNO, ENAME, JOB, SAL, DEPTNO
+FROM EMP
+WHERE DEPTNO = 30
+AND JOB = 'SALESMAN';
+
+-- 3. EMP 테이블에서 20번, 30번 부서에 근무하는 사원 중
+-- 급여가 2000 초과인 사원 번호, 사원이름, 직책, 급여, 부서번호를 출력
+-- 3-1. 집합 연산자를 사용
+SELECT EMPNO, ENAME, JOB, SAL, DEPTNO
+FROM EMP
+WHERE DEPTNO = 20
+AND SAL > 2000
+UNION
+SELECT EMPNO, ENAME, JOB, SAL, DEPTNO
+FROM EMP
+WHERE DEPTNO = 30
+AND SAL > 2000;
+-- 3-2. 집합 연산자를 사용하지 않고 작성
+SELECT EMPNO, ENAME, JOB, SAL, DEPTNO
+FROM EMP
+WHERE DEPTNO IN(20, 30)
+AND SAL > 2000;
+
+-- 4. EMP테이블에서 급여 값이 2000 이상 3000 이하 범위 외의 값을 가진 데이터를 출력
+-- 단 , NOT BETWEEN 을 사용하지 말고 조회하라
+SELECT *
+FROM EMP
+WHERE SAL < 2000 OR SAL > 3000;
+
+-- 5. 사원 이름에 E 가 포함되어 있는 30번 부서의 사원 중
+-- 급여가 1000~ 2000 사이가 아닌 사원 이름, 번호, 급여, 부서번호를 출력
+SELECT ENAME, EMPNO, SAL, DEPTNO
+FROM EMP
+WHERE ENAME LIKE '%E%'
+AND DEPTNO = 30
+AND SAL NOT BETWEEN 1000 AND 2000;
+-- 6. 추가 수당이 존재하지 않고, 상급자가 있고, 직책이 MANAGER, CLERK 인 사원중
+-- 사원이름의 두번째 글자가 L 이 아닌 사원의 정보를 출력하여라
+SELECT *
+FROM EMP
+WHERE COMM IS NULL
+AND MGR IS NOT NULL
+AND JOB IN('MANAGER', 'CLERK')
+AND ENAME NOT LIKE '_L%';

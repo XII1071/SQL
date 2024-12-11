@@ -1,0 +1,57 @@
+1번 문제
+select employee_id as 직원번호,
+       first_name as 이름,
+       salary as 급여
+from employees
+where salary<(select salary 
+              from employees
+              where lower(first_name)='julia'
+                and lower(last_name)='nayer');
+
+2번 문제
+select employee_id as 직원번호,
+       first_name||' '|| last_name as 성명,
+       job_id as 직책ID
+from employees
+where job_id=(select job_id 
+              from employees
+              where lower(first_name||' '||last_name)='alexander hunold');
+
+3번 문제
+select employee_id as 직원번호,
+       job_id as 직책코드,
+       salary as 급여
+from employees
+where salary<(select min(salary) 
+              from employees
+              where job_id='IT_PROG');
+
+4번 문제
+select employee_id as 사번,
+       first_name as 이름,
+       job_id as 직책,
+       salary as 급여
+from employees
+where (job_id, salary) in (select job_id, max(salary) 
+                           from employees
+                           group by job_id)
+order by 직책;
+
+5번 문제
+select employee_id as 직원번호,
+       first_name||' '||last_name as 성명,
+       department_id as 부서번호
+from employees
+where department_id in (select department_id 
+                        from departments
+                        where location_id=1700);
+
+6번 문제
+select employee_id as 직원번호, 
+       first_name||' '||last_name as 성명, 
+       job_id as 직책ID,
+       salary as 월급
+from employees
+where salary > any(select salary 
+                   from employees
+                   where job_id='IT_PROG');
