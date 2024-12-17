@@ -165,3 +165,187 @@ ORDER BY DEPTNO ASC;
 
 COMMIT;
 
+
+-- 쿼리문 (DQL DATA QUERY LANGUAGE)
+-- 데이터 조작어 (DML DATA MANIFULATION)
+-- 데이터 정의어 (DDL DATA DEFINTION LANGUAGE)
+-- 12장 ,객체를 생성, 변경, 삭제하는 데이터 정의어
+
+-- 데이터 정의어를 사용할 때 유의점.
+-- 데이터 정의어는 사용되자마자 COMMIT이 이루어진다.
+
+-- 데이터 정의어에는 어떤 것이 있을까?
+-- 1. 객체 생성 CREATE
+-- 2. 객체 수정 ALTER
+-- 3. 객체 삭제 DROP
+
+-- 테이블을 생성, 수정, 삭제 명령어
+
+-- 1. 테이블 생성
+-- 1-1. 기본 사용법
+--      CREATE TABLE 계정명. 테이블명 (
+--      열1이름 열1자료형(크기),
+--      열2이름 열2자료형(크기), VARCHAR2
+--      ...
+--)
+
+CREATE TABLE EMP_DDL(
+    EMPNO NUMBER(4),
+    ENAME VARCHAR2(10),
+    JOB VARCHAR2(9),
+    MGR NUMBER(4),
+    HIREDATE DATE,
+    SAL NUMBER(7, 2),
+    COMM NUMBER(7, 2),
+    DEPTNO NUMBER(2)
+); 
+-- DESC 다른 애디터에 사용할 수 없을수도 있다,
+DESC EMP_DDL;
+
+-- 1-2. 테이블 및 열 명명법(이름 정하는 법)
+--      1.테이블의 이름은 문자로 시작해야한다.
+CREATE TABLE 90AAAA(TEST_COL NUMBER(2));
+-- 2. 테이블 이름은 30BYTE 이하
+-- 3. 같은 사용자 내에 있을 경우, 테이블 이름은 같을 수 없다.
+-- 4. 테이블 이름은 영문자(한글), 숫자, 특수문자($,#,_) 사용할 수 있다.
+-- 5. SQL키워드는 이름으로 사용할 수 없다. (SELECT, FROM, WHERE 등등)
+
+-- 1-3. 기본 테이블의 열 구조와 데이터까지 같이 복사
+CREATE TABLE DEPT_DDL AS
+    SELECT
+        *
+    FROM
+        DEPT;
+        SELECT
+    *
+FROM
+    DEPT; -- DEPT 에 있는 데이터를 모두 출력하라.
+-- 1-4. 기존 테이블 열 구조와 일부 데이터만 복사.
+CREATE TABLE EMP_DDL_30 AS
+    SELECT
+        *
+    FROM
+        EMP
+    WHERE
+        DEPTNO =30;
+-- 1.5 기존 테이블의 열 구조만 가져오기
+CREATE TABLE EMP_DDL_DESC AS
+    SELECT
+        *
+    FROM
+        EMP
+    WHERE
+        1 <> 1;
+
+-- 2. 테이블 변경 (ALTER)
+-- 예제 테이블 생성
+CREATE TABLE EMP_ALTER AS
+    SELECT
+        *
+    FROM
+        EMP;
+SELECT
+    *
+FROM
+    EMP_ALTER;
+
+-- 2-1. 테이블에 열(컬럼)을 추가하기 - ADD
+ALTER TABLE EMP_ALTER
+ADD HP VARCHAR2(20);
+
+-- 2-2. 열 이름을 변경하기 - RENAME
+ALTER TABLE EMP_ALTER 
+RENAME COLUMN HP TO TEL;
+
+-- 2-3. 열의 자료형을 변경하기 - MODIFY
+ALTER TABLE EMP_ALTER 
+MODIFY EMPNO NUMBER(5);
+
+--2.4 특정 열을 삭제하기 - DROP
+ALTER TABLE EMP_ALTER 
+DROP COLUMN TEL;
+
+SELECT
+    *
+FROM
+    EMP_ALTER;
+
+-- 3. 테이블 이름을 변경 - RENAME
+RENAME EMP_ALTER TO EMP_RENAME;
+
+SELECT
+    *
+FROM
+    EMP_RENAME;
+
+-- 4. 테이블의 데이터를 삭제 - TRUNCATE
+TRUNCATE TABLE EMP_RENAME;
+-- *** 이거는 DML 문에서 DELETE 로도 가능,
+-- *** TRUNCATE 문을 사용하면 DDL 이기 때문에 ROLLBACK 불가능
+
+-- 5. 테이블 삭제하기 - DROP
+DROP TABLE EMP_RENAME;
+-- *** 사용시 바로 COMMIT이 되기 때문에 주의해야함.
+
+CREATE TABLE EMP_HW(
+    EMPNO NUMBER(4),
+    ENAME VARCHAR2(10),
+    JOB VARCHAR2(9),
+    MGR NUMBER(4),
+    HIREDATE DATE,
+    SAL NUMBER(7, 2),
+    COMM NUMBER(7, 2),
+    DEPTNO NUMBER(2)
+); 
+ALTER TABLE EMP_HW
+ADD BIGO VARCHAR2(20);
+
+ALTER TABLE EMP_HW 
+MODIFY BIGO VARCHAR2(30);
+
+ALTER TABLE EMP_HW 
+DROP COLUMN BIGO;
+
+ALTER TABLE EMP_HW 
+RENAME COLUMN BIGO TO REMARK;
+
+CREATE TABLE EMP_HW AS
+    SELECT
+        *
+    FROM
+        EMP;
+        SELECT
+    *
+FROM
+    EMP_HW; 
+
+INSERT INTO EMP_HW (
+    EMPNO,
+    ENAME,
+    JOB,
+    MGR,
+    HIREDATE,
+    SAL,
+    COMM, DEPTNO
+)
+    SELECT
+        EMPNO,
+        ENAME,
+        JOB,
+        MGR,
+        HIREDATE,
+        SAL,
+        COMM,
+        DEPTNO
+    FROM
+        EMP;
+
+SELECT
+    *
+FROM
+    EMP_HW;
+
+
+
+
+
