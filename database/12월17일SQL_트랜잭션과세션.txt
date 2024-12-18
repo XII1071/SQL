@@ -1,0 +1,158 @@
+-- 계정 : SCOTT
+-- 11장 트랜잭션 제어와 세션
+-- 트랜잭션 : 하나의 최소 수행 단위
+--           최소 1개 이상의 DML ( 데이터 CRUD )
+--           All or Nothing
+
+-- 1. 테이블 데이터 확인
+
+SELECT * FROM DEPT_TEMP2;
+
+-- 2. 하나의 DML 작성
+
+UPDATE DEPT_TEMP2
+SET LOC = 'MASAN'
+WHERE DEPTNO = 10;
+
+-- 3. 데이터 확인
+
+SELECT * FROM DEPT_TEMP2;
+
+-- 4. 트랜잭션 취소
+
+ROLLBACK;
+
+-- 5. 테이블 데이터 확인
+
+SELECT * FROM DEPT_TEMP2;
+
+-- 6. 데이터 변경
+
+UPDATE DEPT_TEMP2
+SET LOC = 'CHANGWON'
+WHERE DEPTNO = 10;
+DELETE FROM DEPT_TEMP2
+WHERE DEPTNO = 20;
+
+-- 7. 테이블 데이터 확인
+
+SELECT * FROM DEPT_TEMP2;
+
+-- 8. 트랙잭션 취소
+
+ROLLBACK;
+
+-- 9. 테이블 데이터 확인
+
+SELECT * FROM DEPT_TEMP2;
+
+-- 10. 데이터 수정
+
+UPDATE DEPT_TEMP2
+SET DNAME = 'DATABASE', LOC = 'BUSAN'
+WHERE DEPTNO = 10;
+
+-- 11. 데이터 확인
+
+SELECT * FROM DEPT_TEMP2;
+
+-- 12. 트랜잭션 반영
+
+COMMIT;
+
+-- 13. 데이터 확인
+
+SELECT * FROM DEPT_TEMP2;
+
+
+-- 세션(session)
+--      데이터베이스 접속 시작부터 접속이 종료하기까지의 전체 기간
+--      하나의 세션에는 여러 개의 트랜잭션이 존재
+
+-- 읽기 일관성
+--    특정 세션에서 수행하는 트랜잭션이 
+--    완료되기 전까지는 다른 세션에서는 원래의 데이터를 보여준다.
+
+-- cmd와 sql developer 동시 진행 ( cmd 밑에는 cmd 명령/developer 밑에는 developer 명령 )
+
+-- 1. 데이터 확인
+
+-- cmd
+select * from dept_temp2;
+-- sql developer
+select * from dept_temp2;
+
+-- 2. 데이터 수정 ( sql developer 만 )
+
+update dept_temp2
+set dname = 'session', loc='seoul'
+where deptno = 10;
+
+-- 3. 데이터확인 ( 읽기 일관성에 의해 cmd 와 developer 의 데이터가 다름 )
+
+-- cmd
+select * from dept_temp2;
+-- developer
+select * from dept_temp2;
+
+-- 4. cmd 데이터 수정 ( sqldeveloper 의 트랜잭션이 끝날때까지 기다림)
+
+-- cmd 만
+update dept_temp2 set dname='TEST' where deptno = 10;
+
+-- 5. sql developer 트랜잭션 취소
+
+-- sql developer
+rollback;
+-- cmd 에서는 1 row updated 라고 출력됨
+
+-- 6. 데이터 확인 ( 읽기 일관성에 의해 developer와 cmd가 데이터가 다름 )
+
+-- cmd
+select * from dept_temp2;
+-- developer
+select * from dept_temp2;
+
+-- 7. cmd 에 영구적 반영 명령어를 입력
+
+-- cmd
+commit;
+
+-- 8. cmd와 developer 데이터 확인
+-- ( commit 에 의해 반영되었으므로 둘 다 같은 데이터 출력 )
+
+-- cmd
+select * from dept_temp2;
+-- developer
+select * from dept_temp2;
+
+-- LOCK
+-- 하나의 세션에서 트랜잭션을 실행할 때, 
+-- 다른 세션에서 트랜잭션을 수행하지 못하게 한다.
+-- 행 레벨 lock : 특정 행에만 lock이 발생.
+-- 테이블 레벨 lock : 테이블 자체에 lock이 발생.
+
+-- ********* 아래의 예제는 줄 바꿈이 있을 수 있으니 창 크기를 크게해서 보시길 바랍니다.
+
+1. sql developer					2. cmd
+
+update dept_temp2					update dept_temp2
+set dname = 'abcde'					set dname='qwerty'
+where deptno = 10;					where deptno = 20;
+
+행 레벨 lock 이 걸리기 때문에 양 쪽 데이터는 둘 다 수정이 가능하다.
+
+select * from dept_temp2;				select * from dept_temp2;
+
+sql developer 결과와 cmd 의 결과가 다르다.
+sql developer 는 10번 라인만 변경되었고, cmd 는 20번 라인만 변경되었기 때문에
+
+=======================================================================================
+
+1. sql developer					2. cmd
+
+update dept_temp2					update dept_temp2
+set dname = 'test_table';				set dname = 'test_row'
+							where deptno = 10;
+위의 두 개 중에 cmd 명령문은 실행이 안된다.
+위의 경우에 테이블 레벨 lock 발생.

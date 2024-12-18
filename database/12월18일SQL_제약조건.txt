@@ -1,0 +1,260 @@
+-- 14장. 제약조건
+
+--  - 제약조건의 종류
+--      NOT NULL / UNIQUE / PRIMARY KEY / FOREIGN KEY / CHECK
+
+--  - 제약조건을 사용하는 이유
+--      데이터 무결성 : 저장되는 데이터의 정확성, 일관성을 보장한다.
+--          영역 무결성 : 열에 저장되는 값의 적정 역부를 확인
+--          개체 무결성 : 기본 키는 값을 반드시 가지며, 중복과 NULL 불허한다.
+--          참조 무결성 : 외래키 값은 반드시 참조 테이블의 기본키로 
+--                      존재해야하며, NULL이 가능하다
+
+-- - 보통 제약조건을 걸어줄 때는 테이블을 생성할 때이다.(추가,수정,삭제 가능)
+
+-- 제약조건 추가 ( CREATE TABLE 시 )
+-- : 컬럼명 자료형 제약조건종류
+
+-- 제약조건 이름과 함께 넣기( CREATE TABLE 시 )
+-- : 컬럼명 자료형 CONSTRAINT 제약조건이름 제약조건종류
+
+-- 이미 있는 테이블에 제약조건 추가하기
+-- : ALTER TABLE 테이블명 MODIFY ( 컬럼명 제약조건종류 )
+
+-- 이미 있는 테이블에 제약조건 이름과 함께 추가하기
+-- : ALTER TABLE 테이블명 MODIFY ( 컬럼명 CONSTRAINT 이름 종류 )
+
+-- 제약조건 이름 수정
+-- : ALTER TABLE 테이블명 RENAME CONSTRAINT 제약조건이름 TO 바꿀이름
+
+-- 제약조건 삭제
+-- : ALTER TABLE 테이블명 DROP CONSTRAINT 제약조건이름
+
+-- 1. NOT NULL 제약조건
+--      NULL 값( 빈 값 )을 허용하지 않는다.
+
+CREATE TABLE TABLE_NOTNULL(
+    LOGIN_ID    VARCHAR2(20) NOT NULL,
+    LOGIN_PW    VARCHAR2(20) NOT NULL,
+    TEL         VARCHAR2(20)
+);
+
+DESC TABLE_NOTNULL;
+
+-- NULL 을 넣었을 경우
+-- NULL 값을 넣을 수 없다. ( Cannot insert NULL into 계정.테이블.컬럼 )
+
+INSERT INTO TABLE_NOTNULL(LOGIN_ID, LOGIN_PW, TEL)
+VALUES ( 'TEST_ID_01', NULL, '010-1234-5678');
+
+INSERT INTO TABLE_NOTNULL(LOGIN_ID, LOGIN_PW, TEL)
+VALUES ( 'TEST_ID_01', 'ID_01_PW', NULL);
+
+-- 이미 들어가 있는 데이터를 NULL 로 수정하면 ?
+
+UPDATE TABLE_NOTNULL
+SET LOGIN_PW = NULL
+WHERE LOGIN_ID = 'TEST_ID_01';
+-- Cannot update 계정.테이블.컬럼 to NULL
+--  = 컬럼을 NULL로 업데이트 할 수 없다.
+
+-- 제약조건을 데이터사전에서 확인하기 ( USER_CONSTRAINTS )
+
+SELECT * FROM USER_CONSTRAINTS;
+-- USER_CONTRAINTS 테이블의 주요 컬럼
+-- OWNER : 제약조건을 가지고 있는 소유자
+-- CONSTRAINT_NAME : 제약조건의 이름
+-- CONSTRAINT_TYPE : 제약 조건의 종류
+--          C(check,not null) / U(unique) / P(pk) / R(fk)  
+
+-- 제약조건에 이름 달기
+-- 테이블 만들 때, 자료형 옆에 CONSTRAINT 제약조건이름 제약조건종류 작성.
+
+CREATE TABLE TABLE_NOTNULL2(
+    LOGIN_ID    VARCHAR2(20) CONSTRAINT TBLNN2_LGNID_NN NOT NULL,
+    LOGIN_PW    VARCHAR2(20) CONSTRAINT TBLNN2_LGNPW_NN NOT NULL,
+    TEL         VARCHAR2(20)
+);
+
+SELECT * 
+FROM USER_CONSTRAINTS 
+WHERE CONSTRAINT_NAME LIKE 'TBL%';
+
+-- 이미 생성한 테이블 컬럼에 제약조건 추가하기 ( 테이블 구조를 변경 )
+
+ALTER TABLE TABLE_NOTNULL
+MODIFY ( TEL NOT NULL );
+
+UPDATE TABLE_NOTNULL SET TEL = '01012341234';
+SELECT * FROM TABLE_NOTNULL;
+
+SELECT * FROM USER_CONSTRAINTS;
+
+-- 이미 생성한 테이블 컬럼에 제약조건을 이름 넣어서 달기.
+
+ALTER TABLE TABLE_NOTNULL2
+MODIFY ( TEL CONSTRAINT TBLNN_TEL_NN NOT NULL );
+
+SELECT * FROM USER_CONSTRAINTS;
+
+-- 제약 조건의 이름을 변경하기
+
+ALTER TABLE TABLE_NOTNULL2
+RENAME CONSTRAINT TBLNN_TEL_NN TO TBLNN2_TEL_NN;
+
+SELECT * FROM USER_CONSTRAINTS;
+
+-- 제약조건 삭제
+
+ALTER TABLE TABLE_NOTNULL2
+DROP CONSTRAINT TBLNN2_TEL_NN;
+
+DESC TABLE_NOTNULL2;
+SELECT * FROM USER_CONSTRAINTS;
+
+-- 2. UNIQUE ( 중복된 값을 허락하지 않는다. )
+
+CREATE TABLE TABLE_UNIQUE(
+    LOGIN_ID VARCHAR2(20) UNIQUE,
+    LOGIN_PW VARCHAR2(20) NOT NULL,
+    TEL      VARCHAR2(20)
+);
+
+SELECT * FROM USER_CONSTRAINTS WHERE TABLE_NAME = 'TABLE_UNIQUE';
+
+INSERT INTO TABLE_UNIQUE(LOGIN_ID, LOGIN_PW, TEL)
+VALUES ( 'TEST_ID_01', 'PWD01', '01012341234');
+
+-- Unique constraint ( 계정.제약조건이름 ) violated 에러 발생
+--  = UNIQUE 제약조건에 위배된다.
+
+INSERT INTO TABLE_UNIQUE(LOGIN_ID, LOGIN_PW, TEL)
+VALUES ( 'TEST_ID_01', 'PWD02', '01056785678' );
+
+-- UNIQUE 제약조건이 걸려있는 컬럼에 NULL 값이 들어갈 수 있을까?
+
+INSERT INTO TABLE_UNIQUE ( LOGIN_ID, LOGIN_PW, TEL )
+VALUES ( NULL, 'PWD02', '01012341234');
+-- UNIQUE 제약조건은 NULL 값이 들어가도 된다.
+
+SELECT * FROM TABLE_UNIQUE;
+
+-- 있는 데이터를 똑같은 데이터로 수정하게 되면 ?
+
+UPDATE TABLE_UNIQUE SET LOGIN_ID='TEST_ID_01'
+WHERE LOGIN_PW = 'PWD02';
+-- 위 쿼리문도 UNIQUE 제약조건 위반 에러 발생.
+
+-- 3. 기본 키 ( PRIMARY KEY ), PK
+--   : 테이블의 식별자가 되는 컬럼에 지정
+--   : 중복 X , NULL X 
+--   : PK는 생성과 동시에 INDEX가 만들어진다.
+
+CREATE TABLE TABLE_PK(
+    LOGIN_ID    VARCHAR2(20) PRIMARY KEY,
+    LOGIN_PW    VARCHAR2(20) NOT NULL,
+    TEL         VARCHAR2(20)
+);
+
+SELECT * FROM USER_CONSTRAINTS WHERE TABLE_NAME LIKE 'TABLE_PK%';
+SELECT * FROM USER_INDEXES WHERE TABLE_NAME LIKE 'TABLE_PK%';
+
+-- NULL값을 넣었을 때, NOT NULL 제약조건 때와 같은 에러를 발생
+-- cannot insert NULL into (계정.테이블.컬럼)
+
+INSERT INTO TABLE_PK(LOGIN_ID, LOGIN_PW, TEL)
+VALUES (NULL, 'PWD01', '01012341234');
+
+-- 정상적인 데이터 삽입
+
+INSERT INTO TABLE_PK(LOGIN_ID, LOGIN_PW, TEL)
+VALUES ('ID_01', 'PWD01', '01012341234');
+
+-- 중복 데이터 삽입 ( UNIQUE 제약조건 에러 발생과 같음 )
+-- Unique constraint (계정.제약조건이름) violated 
+
+INSERT INTO TABLE_PK(LOGIN_ID, LOGIN_PW, TEL)
+VALUES ('ID_01', 'PWD01', '01012341234');
+
+-- PK 는 보통 식별자로 많이 사용하기 때문에, 수정, 삭제를 자주 하지 않는다.
+
+-- 4. 외래키 (FOREIGN KEY), FK
+--   : 다른 테이블의 값을 참조하여 가져오는 값.
+--   : 데이터 받는 테이블 - 자식 테이블 / 데이터 주는 테이블 - 부모 테이블
+--   : 부모 테이블에 없는 데이터를 자식 테이블에 넣으면 에러 발생.
+
+-- 데이터사전에서 FK 와 R_PK(참조테이블의 PK) 의 관계 설명
+
+SELECT  OWNER, CONSTRAINT_NAME, CONSTRAINT_TYPE, TABLE_NAME,
+        R_OWNER, R_CONSTRAINT_NAME
+FROM    USER_CONSTRAINTS
+WHERE   TABLE_NAME IN ('EMP', 'DEPT');
+
+SELECT * FROM DEPT;
+
+-- 부모 테이블에 없는 값을 가져오는 경우
+-- integrity constraint (SCOTT.FK_DEPTNO) violated - parent key not found
+-- 무결성 제약조건 (계정.제약조건이름) 위배 - 부모 키를 찾을 수 없다.
+INSERT INTO EMP(EMPNO, ENAME, JOB, MGR, HIREDATE, SAL, COMM, DEPTNO)
+VALUES(9999, '홍길동', 'CLERK', '7788',
+       TO_DATE('2024/12/18','YYYY/MM/DD'), 1200, NULL, 50);
+
+-- 외래키 지정하기
+-- : 컬럼명 자료형 CONSTRAINT 제약조건이름 REFERENCES 부모테이블(컬럼)
+
+CREATE TABLE EMP_FK(
+    EMPNO NUMBER(4) CONSTRAINT EMPFK_EMPNO_PK PRIMARY KEY,
+    ENAME VARCHAR2(10),
+    DEPTNO NUMBER(2) CONSTRAINT EMPFK_DEPTNO_FK 
+                     REFERENCES DEPT(DEPTNO)
+);
+
+-- DEPT 테이블에 50번 데이터 추가
+
+INSERT INTO DEPT(DEPTNO, DNAME, LOC)
+VALUES(50, 'DB', 'KOREA');
+
+-- EMP_FK 테이블에 DEPTNO 50번 데이터 추가
+
+INSERT INTO EMP_FK(EMPNO, ENAME, DEPTNO)
+VALUES(1234, 'ABCDE', 50);
+
+-- 부모테이블 데이터 삭제
+-- integrity constraint (SCOTT.EMPFK_DEPTNO_FK) violated - child record found
+-- 무결성 제약조건 (계정.제약조건이름) 위배 - 자식 데이터가 찾아진다.
+
+DELETE FROM DEPT WHERE DEPTNO = 50;
+
+-- 위의 에러가 날 시 삭제 방법
+-- 1. 삭제하려는 열의 값을 참조하는 데이터를 모두 삭제.
+-- 2. 삭제하려는 열의 값을 참조하는 데이터를 모두 수정.
+-- 3. FK 제약조건을 해제한다.
+
+-- FK 제약조건에다가 조건을 추가 또는 수정
+-- CONSTRAINT 제약조건이름 REFERENCES 부모테이블(컬럼) ON DELETE CASCADE
+--      : 부모테이블의 데이터를 삭제할 때, 자식 데이터(ROW)를 다 삭제한다.
+-- CONSTRAINT 제약조건이름 REFERENCES 부모테이블(컬럼) ON DELETE SET NULL
+--      : 부모테이블의 데이터를 삭제할 때, 자식 데이터는 모두 NULL 로 변경
+
+-- 제약조건 추가하는 방식 ( CREATE TABLE 시 )
+-- 1. 기본적으로 추가하는 방법
+
+-- CREATE TABLE 테이블명(
+--    COL1 DATA_TYPE(SIZE) CONSTRAINT CONSTRAINT_NAME NOT NULL,
+--    COL2 DATA_TYPE(SIZE) NOT NULL,
+--    COL3 DATA_TYPE(SIZE)
+-- );
+
+-- 2. 컬럼 설정은 컬럼대로, 제약조건은 제약조건대로 따로 추가하는 방법.
+
+-- CREATE TABLE 테이블명(
+--      COL1 DATA_TYPE(SIZE),
+--      COL2 DATA_TYPE(SIZE),
+--      COL3 DATA_TYPE(SIZE),
+--      NOT NULL(COL1),      >>>>> 이름없이 COL1 에 NOT NULL 제약조건추가
+--      CONSTRAINT CONSTRAINT_NAME UNIQUE (COL2) 
+--                          >>> 이름 설정해서 COL2에 UNIQUE 제약조건 추가
+--      CONSTRAINT CONSTRAINT_NAME FOREIGN KEY(COL3)
+--             REFERENCES 부모테이블(컬럼)
+--                          >>> 이름 설정해서 COL3 에 FK 제약조건 추가
+-- );

@@ -1,0 +1,43 @@
+11장 연습문제 : 아래의 ???? 에 알맞은 데이터를 작성하시오.
+
+deptno	dname	loc
+-------------------------
+30	SALES	CHICAGO
+
+1. sql developer					2. cmd
+
+update dept_temp2
+set dname='DATABASE', loc='SEOUL'
+where deptno = 30;
+
+select * from dept_temp2;				select * from dept_temp2;
+
+developer 의 데이터						cmd 의 데이터
+-------------------------				-------------------------
+30	????	????					30	????	????
+
+							update dept_TEMP2
+							set dname = 'DATABASE', loc='SEOUL'
+							where DEPTNO = 30;
+
+rollback;
+
+
+select * from dept_TEMP2;				select * from dept_TEMP2;
+
+
+
+developer 의 데이터						cmd 의 데이터
+-------------------------				--------------------------------
+30	?????	?????					30	?????	?????
+
+
+							COMMIT;
+
+SELECT * FROM DEPT_TEMP2;				SELECT * FROM DEPT_TEMP2;
+
+
+
+developer 의 데이터						cmd 의 데이터
+------------------------------				-------------------------------
+30	?????	?????					30	?????	?????

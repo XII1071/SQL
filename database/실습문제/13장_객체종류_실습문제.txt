@@ -1,0 +1,34 @@
+** 사용계정 : SCOTT
+** 해답은 12월18일SQL_객체.TXT 파일의 맨 아래에 있습니다.
+
+1번 문제 ( 각 쿼리문을 작성하시오 )
+
+1-1)EMP 테이블과 같은 구조와 데이터를 가진 EMPIDX 테이블을 만들어보세요.
+1-2)생성한 EMPIDX 테이블의 EMPNO 열에 IDX_EMPIDX_EMPNO 인덱스를 만들어보세요.
+1-3)마지막으로 인덱스가 잘 생성되었는지, 데이터 사전 뷰를 통해 확인해보세요.
+
+2번 문제 ( 쿼리문을 작성하시오 )
+
+2-1) EMPIDX 테이블의 데이터 중 급여(SAL)가 1500 초과인 사원들만 출력하는
+     EMPIDX_OVER15K 뷰를 생성하시오.
+2-2) 이름이 같은 뷰가 이미 존재할 때는 새로운 내용으로 대체 가능해야하며,
+2-3) EMPIDX_OVER15K 뷰는 사원번호(EMPNO), 사원이름(ENAME), 
+     직책(JOB), 부서번호(DEPTNO), 급여(SAL), 추가수당(COMM) 열을 가진다.
+2-4) 추가수당 열의 경우, 데이터를 가지고있으면 'O' 아니면 'X' 를 출력
+
+3번 문제 ( 쿼리문을 작성하시오 )
+
+3-1) DEPT 테이블과 같은 열과 행 구성을 가지는 DEPTSEQ 테이블을 생성
+3-2) 생성한 DEPTSEQ의 테이블에 시퀀스 생성
+	시작값 : 1 / 증가폭 : 1 / 최대값 : 99 / 최소값 : 1
+	최대값에서 생성 중단 / 캐시 없음
+3-3) DEPTSEQ 테이블에 아래(좌)와 같이 세개의 부서를 입력하여 아래(우)의 결과물을 나타내어라
+DNAME		LOC		DEPTNO	DNAME		LOC
+----------------------		------------------------------
+DATABASE	SEOUL		10	ACCOUNTING	NEWYORK
+WEB		BUSAN		20	RESEARCH	DALLAS
+MOBILE		ILSAN		30	SALES		CHICAGO
+				40	OPERATIONS	BOSTON
+				1	DATABASE	SEOUL
+				2	WEB		BUSAN
+				3	MOBILE		ILSAN

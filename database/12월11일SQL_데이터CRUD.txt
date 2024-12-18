@@ -26,28 +26,39 @@ VALUES ( 60, 'ORACLE', 'SEOUL');
 SELECT * FROM DEPT_TEMP;
 
 -- 3. 오류 발생 시나리오
+
 -- 3-1. 지정한 열보다 데이터의 수가 적을 때(NOT ENOUGH VALUES)
 --      지정한 열만큼의 데이터가 없다.
+
 INSERT INTO DEPT_TEMP(DEPTNO, DNAME, LOC)
 VALUES ( 60, 'NETWORK');
+
 -- 3-2. 지정한 열보다 데이터의 수가 많을 때 ( TOO MANY VALUES )
 --      지정한 열보다 데이터가 더 많다.
+
 INSERT INTO DEPT_TEMP(DEPTNO, DNAME, LOC)
 VALUES ( 60, 'NETWORK', 'SEOUL', 'WRONG');
+
 -- 3-3. 지정한 컬럼의 자료형(DATA TYPE) 다를 경우 ( INVALID NUMBER )
+
 INSERT INTO DEPT_TEMP(DEPTNO, DNAME, LOC)
 VALUES ( 'WRONG', 'NETWORK', 'SEOUL' );
+
 -- 3-4. 지정한 컬럼의 자료형 크기보다 크게 작성했을 때
+
 INSERT INTO DEPT_TEMP(DEPTNO, DNAME, LOC)
 VALUES ( 600, 'NETWORK', 'SEOUL');
 
 -- 4. 테이블에 NULL 값 넣기
 -- 4-1. NULL 값 명시하기
+
 INSERT INTO DEPT_TEMP(DEPTNO, DNAME, LOC)
 VALUES ( 70, 'WEB', NULL);
 INSERT INTO DEPT_TEMP(DEPTNO, DNAME, LOC)
 VALUES ( 80, 'JAVA', '');
+
 -- 4-2. 열을 입력할 때 열을 빼버리기
+
 INSERT INTO DEPT_TEMP(DEPTNO, DNAME)
 VALUES ( 90, 'SPRING');
 INSERT INTO DEPT_TEMP(DEPTNO, LOC)
@@ -57,6 +68,7 @@ SELECT * FROM DEPT_TEMP;
 
 -- 5. 테이블에 날짜 데이터 넣기
 -- 5-1. 예제 테이블 만들기
+
 CREATE TABLE EMP_TEMP AS SELECT * FROM EMP WHERE 1 <> 1;
 COMMIT;
 
@@ -115,6 +127,7 @@ COMMIT;
 SELECT * FROM DEPT_TEMP2;
 
 -- 2. 데이터 수정 기본 사용법
+
 -- UPDATE   테이블명
 -- SET      변경할 열1 = [데이터], 변경할 열2 = [데이터], ...
 -- WHERE    변경할 대상을 지정할 조건식;
@@ -122,11 +135,13 @@ SELECT * FROM DEPT_TEMP2;
 
 -- 3. 테이블의 전체 데이터 수정하기
 --     = WHERE을 작성하지 않는다.
+
 UPDATE  DEPT_TEMP2
 SET     LOC = 'SEOUL';
 
 -- 4. 테이블의 일부 데이터만 수정하기
 --     = WHERE을 사용해서 일부 데이터를 추출해낸다.
+
 UPDATE  DEPT_TEMP2
 SET     DNAME = 'DATABASE',
         LOC = 'BUSAN'
@@ -139,6 +154,7 @@ SET     COMM = 50
 WHERE   SAL <= 2500;
 
 -- 5. 서브쿼리를 이용해서 수정하기
+
 UPDATE DEPT_TEMP2
    SET (DNAME,LOC) = ( SELECT DNAME, LOC 
                          FROM DEPT 
@@ -155,6 +171,7 @@ UPDATE DEPT_TEMP2
  WHERE DEPTNO = 30;
 
 -- 5-1. WHERE 절에 서브쿼리 넣기
+
 UPDATE  DEPT_TEMP2
 SET LOC = 'BUSAN'
 WHERE DEPTNO = ( SELECT DEPTNO
@@ -163,7 +180,9 @@ WHERE DEPTNO = ( SELECT DEPTNO
 SELECT * FROM DEPT_TEMP2;
 
 -- <<< 테이블에 있는 데이터를 삭제하기 >>>
+
 -- 1. 예제 테이블 생성하기
+
 CREATE TABLE EMP_TEMP2 AS SELECT * FROM EMP;
 COMMIT; 
 SELECT * FROM EMP_TEMP2;
@@ -174,10 +193,12 @@ SELECT * FROM EMP_TEMP2;
 --   ** WHERE 은 선택사항입니다.
 
 -- 3. 지정한 데이터를 삭제하기
+
 DELETE FROM EMP_TEMP2
 WHERE JOB = 'MANAGER';
 
 -- 4. 서브쿼리를 사용해서 삭제하기
+
 DELETE FROM EMP_TEMP2
 WHERE EMPNO IN ( SELECT E.EMPNO
                    FROM EMP_TEMP2 E, SALGRADE S
@@ -192,6 +213,7 @@ AND S.GRADE = 3
 AND DEPTNO = 30;
 
 -- 5. 테이블의 전체 데이터 삭제하기
+
 DELETE FROM EMP_TEMP2;
 
 SELECT * FROM EMP_TEMP2 ORDER BY JOB;
