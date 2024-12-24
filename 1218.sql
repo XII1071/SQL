@@ -682,3 +682,5 @@ DELETE FROM DEPT WHERE DEPTNO = 50;
 --             REFERENCE 부모테이블(컬럼)
 --                          >>> 이름 설정해서 COL3 에 FK 제약조건 추가
 -- );
+
+
