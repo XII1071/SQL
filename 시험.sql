@@ -1,0 +1,108 @@
+-- 1
+INSERT INTO DEPT01(
+DEPTNO, DNAME, LOC
+) VALUES (
+    50,
+    'DEVELOP',
+    'BUSAN'
+);
+
+
+-- 2
+UPDATE DEPT01
+SET
+    DNAME = 'RESEARCH',
+    LOC = 'SEOUL'
+WHERE
+    DEPTNO = 20;
+-- 3
+DELETE FROM EMP01
+WHERE
+    DEPTNO = 20;
+    
+    
+ -- 4   
+SELECT 
+    ENAME AS 사원명,
+    SAL AS 기본급여,
+    CASE
+        WHEN SAL < 1500 THEN SAL * 0.1
+        WHEN SAL >= 1501 AND SAL <= 3000 THEN SAL * 0.05
+        ELSE 0
+    END AS 추가급여,
+    SAL + 
+    CASE
+        WHEN SAL < 1500 THEN SAL * 0.1
+        WHEN SAL >= 1501 AND SAL <= 3000 THEN SAL * 0.05
+        ELSE 0
+    END AS 총급여
+FROM 
+    EMP01;
+  
+-- 5  
+SELECT
+    D.DNAME,
+    E.ENAME,
+    E.SAL
+FROM
+    EMP01  E,
+    DEPT01 D
+WHERE
+    E.DEPTNO = D.DEPTNO 
+    AND E.SAL > 2000
+ORDER BY SAL DESC;
+
+
+-- 6
+SELECT 
+    E.ENAME AS EMPLOYEE_NAME,
+    M.ENAME AS MANAGER_NAME
+FROM 
+    EMP01 E
+LEFT JOIN 
+    EMP01 M
+ON 
+    E.MGR = M.EMPNO;
+    
+-- 7    
+SELECT 
+    DEPTNO,
+    FLOOR(AVG(SAL)) AS AVG_SAL,
+    COUNT(*) AS CNT
+FROM 
+    EMP01
+GROUP BY 
+    DEPTNO;
+  
+  
+-- 8    
+SELECT 
+    E.EMPNO,
+    E.ENAME, 
+    D.DNAME, 
+    E.SAL 
+FROM 
+    EMP01 E
+JOIN 
+    DEPT01 D
+ON 
+    E.DEPTNO = D.DEPTNO
+WHERE 
+    E.SAL > (SELECT AVG(SAL) FROM EMP01);
+
+SELECT 
+    E.ENAME AS ENAME,
+    E.JOB AS JOB,
+    D.DNAME AS DNAME
+FROM 
+    EMP01 E
+JOIN 
+    DEPT01 D
+ON 
+    E.DEPTNO = D.DEPTNO
+WHERE 
+    E.JOB = (SELECT JOB FROM EMP01 WHERE ENAME = 'MARTIN');
+
+
+
+

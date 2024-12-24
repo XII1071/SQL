@@ -373,8 +373,8 @@ SELECT
     E.ENAME,
     E.SAL
 FROM
-    EMP  E,
-    DEPT D
+    EMP01  E,
+    DEPT01 D
 WHERE
     E.DEPTNO = D.DEPTNO -- JOIN 조건
     AND E.SAL > 2000
@@ -402,7 +402,7 @@ ORDER BY
 -- 2.1 각 부서별 평균 급여, 최대 급여, 최소 급여, 사원수를 출력하세요.
 -- 2.2 출력 순서 : 부서번호, 부서명, 평균급여(AVG_SAL), 최대급여 (MAX_SAL), 최소급여 (MIN_SAL), 부서의 사원수 (CNT)
 
--- SQL99 아닌 버전
+-- SQL99 아닌 버전  
 SELECT
     D.DEPTNO,
     D.DNAME,

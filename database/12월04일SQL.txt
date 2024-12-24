@@ -12,7 +12,7 @@ FROM EMP;
 
 -- 2. COUNT ([DISTINCT, ALL] DATA ) 함수 : 쿼리 결과 ROW의 데이터 수
 SELECT COUNT(*)
-FROM EMP;
+FROM EMP; 
 -- 조건을 달아서 COUNT 하기
 SELECT COUNT(*)
 FROM EMP

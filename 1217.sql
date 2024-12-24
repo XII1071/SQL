@@ -16,7 +16,7 @@ WHERE DEPTNO = 10;
 
 -- 3. 데이터 확인
 
-SELECT * FROM DEPT_TEMP2;
+SELECT * FROM DEPT_TEMP2; 
 
 -- 4. 트랜잭션 취소
 

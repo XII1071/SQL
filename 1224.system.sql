@@ -112,3 +112,4 @@ DROP ROLE NORMAL_USER;
 SELECT * FROM USER_SYS_PRIVS; -- 유저에게 부여된 시스템 권한 조회
 SELECT * FROM USER_ROLE_PRIVS;-- 유저에게 부여된 롤 조회
 SELECT * FROM USER_TAB_PRIVS; -- 유저에게 부여된 객체 권한 조회
+
