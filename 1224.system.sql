@@ -50,7 +50,7 @@ DROP USER STUDYORCL CASCADE;
 --       현재 사용자 외의 사용자의 테이블도 생성할 수 있다.
 
 -- 권한 부여
--- 기본 구문 : GRANT [ 권한종류 ] TO [ 사용자 이름 / 롤 이름 / PUBLIC ]
+-- 기본 구문 : GRANT [ 권한종류 ] TO [ 사용자 이름 / 롤 이름 / PUBLIC ] 
 --            [ WITH ADMIN OPTION ]
 --              권한 종류와 사용자이름/롤이름 = 필수
 --              WITH ADMIN OPTION = 선택

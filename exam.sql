@@ -1,0 +1,68 @@
+-- 데이터베이스구현_평가자체크리스트_강지원.sql
+-- whaksgus123@naver.com
+
+-- 1. 유저생성
+-- CREATE USER [유저명] IDENTIFIED BY [패스워드];
+-- 2 시스템 권한 부여
+-- GRANT [시스템 권한내용] TO [사용자이름];
+-- 3. 유저 비밀번호 재변경
+-- ALTER USER [유저명] IDENTIFIED BY [바꿀비밀번호];
+-- 4. 테이블 생성
+-- CREATE TABLE 테이블명 (
+-- 컬럼명 자료형 (사이즈)
+-- 컬럼명 자료형 (사이즈)
+-- );   
+-- 5. 테이블 컬럼 추가
+-- ALTER TABLE [테이블명] ADD [컬럼명] [자료형(사이즈)];
+--6. 테이블 컬럼 변경
+-- ALTER TABLE [테이블명] MODIFY [바꿀컬럼명] [자료형(사이즈)];
+-- 7. 테이블 컬럼 삭제
+-- ALTER TABLE [테이블명] DROP COLUMN [컬럼명];
+-- 테이블 열에 제약조건 추가하기
+-- ALTER TABLE [테이블명] MODIFY  [컬럼명] [제약조건명];
+-- 9. 여러개의 제약조건 추가하기
+-- ALTER TABLE [테이블명] MODIFY [컬럼명];
+-- CONSTRAINT [제약조건명] [제약조건 종류]
+-- CONSTRAINT [제약조건명] [제약조건 종류]
+-- 10. 테이블 생성, 제약조건 추가
+-- CREATE TABLE [테이블명] (
+
+-- [컬럼명] [자료형(사이즈)] [제약조건 종류],
+-- [컬럼명] [자료형(사이즈)] [제약조건 종류],
+-- [컬럼명] [자료형(사이즈)] [제약조건 종류],
+-- [컬럼명] [자료형(사이즈)] [제약조건 종류],
+-- [컬럼명] [자료형(사이즈)] [제약조건 종류],
+-- [컬럼명] [자료형(사이즈)] [제약조건 종류],
+--);    
+-- 11. 데이터 사전에서 현재 계정이 소유한 테이블 보기
+-- SELECT * FROM USER_TABLES;
+-- 12. 생성된 테이블에 외래키 지정하기
+-- ALTER TABLE [테이블명] MODIFY [컬럼명] REFERENCES [참조테이블 (참조컬럼명)]
+-- 13. 시퀀스 생성
+-- CREATE SEQUENCE [시퀀스명]
+-- START WITH [시작값]
+-- INCREMENT BY [증가값]
+-- MAXVALUE [최대값]
+-- MINVALUE [최소값]
+-- CYCLE/NOCYCLE
+-- CACHE n / NOCACHE
+-- 14. 데이터입력, 시퀀스 사용 데이터 입력
+-- INSERT INTO [테이블명 (컬럼1,컬럼2)] VALUES (데이터1, 데이터2);
+-- INSERT INTO [테이블명 (컬럼1,컬럼2)] VALUES (시퀀스명.NEXTVAL, 데이터2);
+-- 15. 인덱스 생성
+-- CREATE INDEX [인데스명] ON [테이블(컬럼)];
+-- 16. 뷰 생성
+-- CREATE VIEW [뷰명] AS ( 쿼리-조인포함 )
+-- 17. 계정 생성후 객체 권한 부여
+-- CREATE USER [유저명] IDENTIFIED BY [비밀번호];
+-- GRANT [권한종류1],[권한종류2],.. ON [유저명].[테이블명] TO [부여받을계정]
+-- 18. 롤 생성, 롤 부여
+-- CREATE ROLE [롤 명];
+-- GRANT [권한1],[권한2],..TO [롤명];
+-- GRANT [롤명] TO [사용자명];
+-- 19. 권한 취소
+-- REVOKE [권한1], [권한2], ... ON [사용자명].[테이블명] FROM [사용자명];
+-- 20. 유저 삭제 - 객체가 들어있다.
+-- DROP USER [유저명];
+-- DROP USER [유저명] CASCADE;
+
