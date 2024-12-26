@@ -69,8 +69,105 @@ END;
 --    LOB : LARGE OBJECT 사진 또는 동영상, 음악파일을 저장하는 자료형
 
 -- 참조 자료형 예제
+DECLARE
+    V_DEPTNO DEPT.DEPTNO%TYPE := 50;
+ 
+    -- V_DEPTNO 라는 변수는 DEPT 테이블의 DEPTNO 열의 자료형을 쓴다.
+    V_DEPT_ROW DEPT%ROWTYPE;
+    -- SELECT 문을 이용해서 한 줄의 ROW 데이터를 넣는다.
+    SELECT
+        DEPTNO,
+        DNAME,
+        LOC INTO V_DEPT_ROW
+    FROM
+        DEPT
+    WHERE
+        DEPTNO = 40;
+    -- 위 쿼리문을 사용해서 INTO 구문을 이용해 결과값 (한 줄 ROW)을 변수에 대입한다.
+    DBMS_OUTPUT.PUT_LINE('V_DEPTNO : '
+                         || V_DEPTNO);
+    DBMS_OUTPUT.PUT_LINE('V_DEPT_ROW.DEPTNO : '
+                         || V_DEPT_ROW.DEPTNO);
+    DBMS_OUTPUT.PUT_LINE('V_DEPT_ROW.DNAME : '
+                         || V_DEPT_ROW.DNAME);
+    DBMS_OUTPUT.PUT_LINE('V_DEPT_ROW.LOC : '
+                         || V_DEPT_ROW.LOC);
+END;
+/
+
+-- 조건 제어문 ( IF-ELSEIF-ELSE / CASE-WHEN-ELSE)
+-- 1. IF 조건문 THEN 실행문         -- 첫 번째 실행 조건 (필수)
+--    ELSEIF 조건문 THEN 실행문     -- 다른 실행 조건 (선택)
+--    ELSE 실행문                  -- 위 조건문과 모두 다를 때 실행 (선택)
+DECLARE
+    V_NUMBER NUMBER(4) := 200;
+BEGIN
+    IF V_NUMBER > 50 AND V_NUMBER < 101 THEN
+        DBMS_OUTPUT.PUT_LINE('높다');
+    ELSIF V_NUMBER > 100 THEN
+        DBMS_OUTPUT.PUT_LINE('많이 높다');
+    ELSE
+        DBMS_OUTPUT.PUT_LINE('낮다');
+        END IF;
+    END;
+/
+
+-- 2. CASE 문
+-- CASE 비교기준
+--  WHEN 값1 THEN 실행문
+--  WHEN 값2 THEN 실행문
+--  ELSE 실행문
+-- END CASE;
+-- 비교기준이 없다면 WHEN 조건문을 THEN 실행문으로 사용.
+DECLARE
+    V_NUMBER := 4;
+BEGIN
+    CASE MOD(V_NUMBER, 2) -- 1, 0 값만 나온다.
+        WHEN 1 THEN
+            DBMS_OUTPUT.PUT_LINE('홀수입니다.');
+        -- WHEN 0 THEN DBMS_OUTPUT.PUT_LINE('짝수입니다.');
+        ELSE DBMS_OUTPUT.PUT_LINE('짝수입니다.');
+    END CASE;
+END;
+/
 
 
+DECLARE
+        V_NUMBER NUMBER(4) := 87;
+BEGIN
+    CASE 
+        WHEN V_NUMBER >= 90 THEN DBMS_OUTPUT.PUT_LINE('A');
+        WHEN V_NUMBER >= 80 THEN DBMS_OUTPUT.PUT_LINE('B');
+        WHEN V_NUMBER >= 70 THEN DBMS_OUTPUT.PUT_LINE('C');
+        WHEN V_NUMBER >= 60 THEN DBMS_OUTPUT.PUT_LINE('D');
+        ELSE DBMS_OUTPUT.PUT_LINE('F');
+    END CASE;
+END;
+/
 
+-- 반복문 ( 기본 LOOP, WHILE LOOP, FOR LOOP )
+-- 1. 기본 LOOP
+DECLARE
+    V_NUM NUMBER(4) := 0;
+BEGIN
+    LOOP
+        DBMS_OUTPUT.PUT_LINE('현재 V_NUM : ' || V_NUM);
+        V_NUM := V_NUM + 1;
+        EXIT WHEN V_NUM > 4;
+        -- IF V_NUM > 4 THEN EXIT;
+        -- END IF;
+        -- END IF;
+        -- LOOP 문을 종료 시키는 2가지 구문 ( EXIT, EXIT WHEN )
+        -- EXIT = LOOP문을 바로 종료 ( IF 문과 함께 사용 권장 )
+        -- EXIT WHEN [조건식] = 조건식에 맞으면 LOOP문을 종료
+    END LOOP;
+END;
+/
 
-
+-- 2. WHILE LOOP ( 조건식에 맞으면 실행문을 실행  )
+-- WHILE 조건식
+--      실행문
+-- END LOOP;
+DECLARE
+    V_NUM NUMBER(4) := 0;
+BEGIN
